@@ -107,26 +107,30 @@ int main(void)
 
   nrf_ic_info_get(nrf_info);
    nrf_delay_ms(500);
-   char info[128];
-   sprintf(info, "icrev: %d, ram: %d, flash: %d, ramblks: %d", NRF_FICR->DEVICEID, nrf_info->ram_size, nrf_info->flash_size,  NRF_FICR->NUMRAMBLOCK);
-   gdispDrawString(24,20, info, font_small, White);
-   //gdispDrawString(24,30, "Hello lcd world", font, White);
-
-   //gdispFillCircle(20, 20, 10, White);
+   char sbuf[128];
+   sprintf(sbuf, "icrev: %d, ram: %d, flash: %d, ramblks: %d", NRF_FICR->CONFIGID, nrf_info->ram_size, nrf_info->flash_size,  NRF_FICR->NUMRAMBLOCK);
+   gdispDrawString(24,20, sbuf, font_small, White);
+   
+   gdispFillCircle(80, 80, 10, White);
    gdispDrawBox(22, 00, 10, 10, White);
    gdispDrawBox(352, 00, 10, 10, White);
    gdispDrawBox(22, 140, 20, 20, White);
-   gdispFlush();
-  /* Toggle LEDs. */
+
+  gdispDrawString(24,40, "Hello lcd", font_med, White);
+  gdispFlush();
   while (true)
   {
+
     //nrf_gpio_pin_toggle(LCD_BACKLIGHT);
     NRF_LOG_DEBUG("tick: %d\n", tick);
     //gdispControl(GDISP_CONTROL_INVERSE, 1);
-    //gfxSleepMilliseconds(500);
+    gfxSleepMilliseconds(500);
     //gdispControl(GDISP_CONTROL_INVERSE, 0);
     nrf_delay_ms(200);
-    
+    sprintf(sbuf, "hello lcd land, tick: %8d", tick);
+    gdispDrawString(24,40, sbuf, font_med, White);
+    gdispFlush();
+
   }
 }
 
