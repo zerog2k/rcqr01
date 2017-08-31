@@ -14,9 +14,9 @@ _build/gdisp_lld_ST7586.o: \
  uGFX/src/gmisc/gmisc_rules.h uGFX/src/gtrans/gtrans_rules.h \
  uGFX/src/gfile/gfile_rules.h uGFX/src/gdriver/gdriver_rules.h \
  uGFX/src/gos/gos_rules.h uGFX/src/gos/gos.h uGFX/src/gos/gos_raw32.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdint.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stddef.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/__crossworks.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdint.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stddef.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/__crossworks.h \
  uGFX/src/gos/gos_x_threads.h uGFX/src/gos/gos_x_heap.h \
  uGFX/src/gfile/gfile.h uGFX/src/gfile/../../gfx.h uGFX/src/gmisc/gmisc.h \
  uGFX/src/gmisc/../../gfx.h uGFX/src/gtrans/gtrans.h \
@@ -49,14 +49,14 @@ _build/gdisp_lld_ST7586.o: \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/device/nrf51422_peripherals.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/nrf_assert.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/app_error.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdio.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdbool.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdio.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdbool.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/sdk_errors.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/softdevice/s130/headers/nrf_error.h \
  sdk_config.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/nordic_common.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/app_error_weak.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdlib.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdlib.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/spi_master/nrf_drv_spi.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/nordic_common.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/hal/nrf_peripherals.h \
@@ -66,7 +66,7 @@ _build/gdisp_lld_ST7586.o: \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/log/nrf_log.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/log/src/nrf_log_internal.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/sdk_common.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/string.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/string.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/device/compiler_abstraction.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/sdk_os.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/app_util.h \

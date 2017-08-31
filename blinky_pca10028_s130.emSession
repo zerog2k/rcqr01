@@ -31,6 +31,7 @@
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;Application"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;Internal Files"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_Drivers"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_Libraries"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;uGFX"/>
  </Project>
@@ -54,13 +55,12 @@
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="blinky_rcqr01" decimalNodes="" octalNodes="" unsignedNodes=""/>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="rcqr01_demo" decimalNodes="" octalNodes="" unsignedNodes=""/>
  </Register4>
- <TargetWindow programLoadAddress="" programSize="" uploadStartAddress="" programMemoryInterface="" programFileName="" uploadMemoryInterface="" programFileType="" uploadFileName="" uploadFileType="" programAction="" uploadSize=""/>
  <TraceWindow>
   <Trace enabled="Yes"/>
  </TraceWindow>
  <Watch1>
   <Watches active="1" update="Never">
-   <Watchpoint numelements="0" expression="y" evalMode="0" name="y" radix="16" linenumber="222" filename="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" list=""/>
+   <Watchpoint numelements="0" expression="y" evalMode="0" name="y" radix="16" linenumber="224" filename="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" list=""/>
   </Watches>
  </Watch1>
  <Watch2>
@@ -73,14 +73,13 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="81" y="110" useTextEdit="1" useBinaryEdit="0" left="0" path="main.c" debugPath="main.c" selected="0" top="88" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="48" y="167" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" debugPath="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" selected="0" top="162" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="95" useTextEdit="1" useBinaryEdit="0" left="0" path="main.c" debugPath="main.c" selected="0" top="197" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="19" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/st7586.h" debugPath="uGFX/drivers/gdisp/ST7586/st7586.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="71" useTextEdit="1" useBinaryEdit="0" left="0" path="gfxconf.h" debugPath="gfxconf.h" selected="0" top="69" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="51" useTextEdit="1" useBinaryEdit="0" left="0" path="board_ST7586.h" debugPath="board_ST7586.h" selected="0" top="23" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="../../nRF5_SDK_12.3.0/components/libraries/ic_info/nrf_ic_info.h" debugPath="../../nRF5_SDK_12.3.0/components/libraries/ic_info/nrf_ic_info.h" selected="0" top="45" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="331" useTextEdit="1" useBinaryEdit="0" left="0" path="sdk_config.h" debugPath="sdk_config.h" selected="1" top="328" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="32" useTextEdit="1" useBinaryEdit="0" left="0" path="apptimers.h" debugPath="apptimers.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="69" useTextEdit="1" useBinaryEdit="0" left="0" path="gfxconf.h" debugPath="gfxconf.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="96" useTextEdit="1" useBinaryEdit="0" left="0" path="board_ST7586.h" debugPath="board_ST7586.h" selected="0" top="75" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="10" y="175" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" debugPath="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" selected="1" top="167" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="381" useTextEdit="1" useBinaryEdit="0" left="0" path="sdk_config.h" debugPath="sdk_config.h" selected="0" top="162" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/gdisp_lld_config.h" debugPath="uGFX/drivers/gdisp/ST7586/gdisp_lld_config.h" selected="0" top="0" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="blinky_rcqr01" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="debug" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/ic_info" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="rcqr01_demo" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="debug" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/ic_info" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

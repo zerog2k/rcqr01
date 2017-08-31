@@ -1,10 +1,10 @@
 _build/nrf_drv_spi.o: \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/spi_master/nrf_drv_spi.c \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/sdk_common.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdint.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdbool.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/string.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/__crossworks.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdint.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdbool.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/string.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/__crossworks.h \
  sdk_config.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/nordic_common.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/device/compiler_abstraction.h \
@@ -28,16 +28,16 @@ _build/nrf_drv_spi.o: \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/hal/nrf_peripherals.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/device/nrf51422_peripherals.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/hal/nrf_spi.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stddef.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stddef.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/sdk_errors.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/common/nrf_drv_common.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/nrf_assert.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/app_error.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdio.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdio.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/app_error_weak.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/hal/nrf_gpio.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/hal/nrf_peripherals.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdlib.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdlib.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/app_util_platform.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/softdevice/s130/headers/nrf_soc.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/softdevice/s130/headers/nrf_svc.h \

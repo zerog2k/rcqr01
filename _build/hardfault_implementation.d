@@ -1,10 +1,10 @@
 _build/hardfault_implementation.o: \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/hardfault/hardfault_implementation.c \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/sdk_common.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdint.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdbool.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/string.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/__crossworks.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdint.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdbool.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/string.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/__crossworks.h \
  sdk_config.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/nordic_common.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/device/compiler_abstraction.h \

@@ -30,7 +30,7 @@ static volatile bool spi_xfer_done;  /**< Flag used to indicate that SPI instanc
 void spi_event_handler(nrf_drv_spi_evt_t const * p_event)
 {
     spi_xfer_done = true;
-    NRF_LOG_DEBUG("spi transfer completed.\n");
+    //NRF_LOG_DEBUG("spi transfer completed.\n");
 }
 
 static GFXINLINE void init_board(GDisplay *g) {
@@ -53,6 +53,7 @@ static GFXINLINE void init_board(GDisplay *g) {
   spi_config.miso_pin = LCD_MISO;
   spi_config.mosi_pin = LCD_MOSI;
   spi_config.sck_pin  = LCD_SCK;
+  spi_config.frequency = NRF_DRV_SPI_FREQ_8M;
   APP_ERROR_CHECK(nrf_drv_spi_init(&spi, &spi_config, spi_event_handler));
 
 	(void) g;
@@ -108,7 +109,8 @@ static GFXINLINE void write_data(GDisplay *g, uint8_t* data, uint16_t length) {
 	(void) length;
   nrf_gpio_pin_write(LCD_DC, 1);
   spi_xfer_done = false;
-  APP_ERROR_CHECK(nrf_drv_spi_transfer(&spi, data, length, NULL, 0));
+  //APP_ERROR_CHECK(nrf_drv_spi_transfer(&spi, data, length, NULL, 0));
+  nrf_drv_spi_transfer(&spi, data, length, NULL, 0);
   while (!spi_xfer_done);
 }
 

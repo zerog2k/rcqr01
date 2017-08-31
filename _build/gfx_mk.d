@@ -30,9 +30,9 @@ _build/gfx_mk.o: /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gfx_mk.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/../src/gos/gos_rules.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/../src/gos/gos.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/../src/gos/gos_raw32.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdint.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stddef.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/__crossworks.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdint.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stddef.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/__crossworks.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/../src/gos/gos_x_threads.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/../src/gos/gos_x_heap.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/../src/gfile/gfile.h \
@@ -64,7 +64,7 @@ _build/gfx_mk.o: /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gfx_mk.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_chibios.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_ecos.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_freertos.c \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/string.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/string.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_linux.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_osx.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_raw32.c \
@@ -73,9 +73,9 @@ _build/gfx_mk.o: /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gfx_mk.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_cmsis.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_nios.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_x_threads.c \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/setjmp.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/setjmp.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gos/gos_x_heap.c \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdlib.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdlib.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gdriver/gdriver_mk.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gdriver/gdriver.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gdriver/../../gfx.h \
@@ -92,7 +92,7 @@ _build/gfx_mk.o: /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gfx_mk.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gdisp/mcufont/mf_rlefont.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gdisp/mcufont/mf_bwfont.h \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gdisp/mcufont/mf_scaledfont.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdbool.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdbool.h \
  uGFX/src/gdisp/fonts/fonts.h uGFX/src/gdisp/fonts/fixed_10x20.c \
  uGFX/mf_bwfont.h uGFX/src/gdisp/fonts/fixed_7x14.c \
  /Users/jens/build/nrf/rcqr01/ses_proj/uGFX/src/gdisp/mcufont/mf_rlefont.c \

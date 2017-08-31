@@ -1,10 +1,10 @@
 _build/nrf_log_backend_serial.o: \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/log/src/nrf_log_backend_serial.c \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/sdk_common.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdint.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdbool.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/string.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/__crossworks.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdint.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdbool.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/string.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/__crossworks.h \
  sdk_config.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/nordic_common.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/device/compiler_abstraction.h \
@@ -35,11 +35,11 @@ _build/nrf_log_backend_serial.o: \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/softdevice/s130/headers/nrf_nvic.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/nrf_assert.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/app_error.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdio.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdio.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/util/app_error_weak.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdarg.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/ctype.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/__crossworks.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdarg.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/ctype.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/__crossworks.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/external/segger_rtt/SEGGER_RTT_Conf.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/external/segger_rtt/SEGGER_RTT.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/external/segger_rtt/SEGGER_RTT_Conf.h

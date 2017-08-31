@@ -1,7 +1,7 @@
 _build/nrf_ic_info.o: \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/ic_info/nrf_ic_info.c \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/ic_info/nrf_ic_info.h \
- /Applications/SEGGER\ Embedded\ Studio\ 3.24/include/stdint.h \
+ /Applications/SEGGER\ Embedded\ Studio\ 3.26a/include/stdint.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/device/nrf.h \
  /Users/jens/build/nrf/nRF5_SDK_12.3.0/components/device/nrf51.h \
  /Users/jens/Library/SEGGER/SEGGER\ Embedded\ Studio/v3/packages/CMSIS_4/CMSIS/Include/core_cm0.h \
