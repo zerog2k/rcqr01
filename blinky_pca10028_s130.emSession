@@ -1,7 +1,9 @@
 <!DOCTYPE CrossStudio_Session_File>
 <session>
  <Bookmarks/>
- <Breakpoints groups="Breakpoints" active_group="Breakpoints"/>
+ <Breakpoints groups="Breakpoints" active_group="Breakpoints">
+  <Exceptions set="HardFault"/>
+ </Breakpoints>
  <ExecutionProfileWindow/>
  <FrameBufferWindow>
   <FrameBufferWindow bufferHeight="-1" addressSpace="" addressText="" bufferWidth="-1"/>
@@ -33,6 +35,7 @@
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;Internal Files"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_Drivers"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_Libraries"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;System Files"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;uGFX"/>
  </Project>
  <Register1>
@@ -60,7 +63,7 @@
  </TraceWindow>
  <Watch1>
   <Watches active="1" update="Never">
-   <Watchpoint numelements="0" expression="y" evalMode="0" name="y" radix="16" linenumber="224" filename="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" list=""/>
+   <Watchpoint numelements="0" expression="y" evalMode="0" name="y" radix="16" linenumber="236" filename="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" list=""/>
   </Watches>
  </Watch1>
  <Watch2>
@@ -73,13 +76,14 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="95" useTextEdit="1" useBinaryEdit="0" left="0" path="main.c" debugPath="main.c" selected="0" top="197" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="95" useTextEdit="1" useBinaryEdit="0" left="0" path="main.c" debugPath="main.c" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="19" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/st7586.h" debugPath="uGFX/drivers/gdisp/ST7586/st7586.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="69" useTextEdit="1" useBinaryEdit="0" left="0" path="gfxconf.h" debugPath="gfxconf.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="96" useTextEdit="1" useBinaryEdit="0" left="0" path="board_ST7586.h" debugPath="board_ST7586.h" selected="0" top="75" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="10" y="175" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" debugPath="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" selected="1" top="167" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="381" useTextEdit="1" useBinaryEdit="0" left="0" path="sdk_config.h" debugPath="sdk_config.h" selected="0" top="162" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="156" useTextEdit="1" useBinaryEdit="0" left="0" path="gfxconf.h" debugPath="gfxconf.h" selected="0" top="140" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="45" y="55" useTextEdit="1" useBinaryEdit="0" left="0" path="board_ST7586.h" debugPath="board_ST7586.h" selected="0" top="94" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="163" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" debugPath="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" selected="1" top="151" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="27" y="2113" useTextEdit="1" useBinaryEdit="0" left="0" path="sdk_config.h" debugPath="sdk_config.h" selected="0" top="2082" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/gdisp_lld_config.h" debugPath="uGFX/drivers/gdisp/ST7586/gdisp_lld_config.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="6" useTextEdit="1" useBinaryEdit="0" left="0" path="apptimers.h" debugPath="apptimers.h" selected="0" top="0" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="rcqr01_demo" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="debug" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/ic_info" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

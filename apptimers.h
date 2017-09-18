@@ -4,6 +4,7 @@
 #define APP_TIMER_PRESCALER             0                     /**< Value of the RTC1 PRESCALER register. */
 #define APP_TIMER_MAX_TIMERS            4                     /**< Maximum number of simultaneously created timers. */
 #define TIMER_TICKS		        APP_TIMER_TICKS(1, APP_TIMER_PRESCALER)
+#define DISPLAY_TIMER_TICKS	APP_TIMER_TICKS(600, APP_TIMER_PRESCALER)
 
 //For the queue size I used what was used for the example I copy/pasted.  There
 //is an explanation on the Nordic Devzon on the APP_TIMER_OP_QUEUE_SIZE
@@ -64,4 +65,5 @@ static void tick_init(void)
   APP_ERROR_CHECK(err_code);
 
 }
+
 

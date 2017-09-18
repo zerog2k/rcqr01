@@ -83,7 +83,7 @@ uint8_t bitpos(uint32_t input)
 }
 
 
-char get_key_char_from_table(col, row)
+char get_key_char_from_table(uint8_t col, uint8_t row)
 {
   uint8_t idx = (col * 8) + row;
   return keytab[idx];
@@ -121,10 +121,6 @@ int main(void)
 
   NRF_LOG_INIT(NULL);
   tick_init();
-  
-  // test output pin 
-  
-  uint8_t outpin = 8 ;
  
   gfxInit();
   font_small = gdispOpenFont("fixed_7x14");
@@ -158,7 +154,7 @@ int main(void)
     //gdispControl(GDISP_CONTROL_INVERSE, 1);
     //gfxSleepMilliseconds(1000);
     //gdispControl(GDISP_CONTROL_INVERSE, 0);
-    nrf_delay_ms(100);
+    nrf_delay_ms(30);
 
     // pin experiments
     /*
@@ -212,7 +208,9 @@ int main(void)
       }
     }
 
+    
     elapsed = tick - elapsed;
+
 
     sprintf(sbuf, "hello lcd land, tick: %8d", tick);
     gdispFillString(0, 40, sbuf, font_med, White, Black);
@@ -237,18 +235,19 @@ int main(void)
     init_diff = gpio_state ^ init_state;
     NRF_LOG_INFO("init  diff: 0x%08X, b: %d", init_diff, bitpos(init_diff));
 
-    sprintf(sbuf, "outpin: %d", outpin);
-    gdispFillString(0,130, sbuf, font_med, White, Black);
-
     NRF_LOG_INFO("row pin: %d\n", row_pins[rowidx]);
     */
 
     sprintf(sbuf, "draw delay: %d", drawdelay);
     gdispFillString(0,110, sbuf, font_med, White, Black);
 
-    drawdelay = tick;
-    gdispFlush();
-    drawdelay = tick - drawdelay;
+    if (pressed | elapsed > 10000)
+    {
+      drawdelay = tick;
+      gdispFlush();
+      drawdelay = tick - drawdelay;
+    }
+
     prev_state = gpio_state;
 
   }
