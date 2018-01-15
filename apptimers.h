@@ -1,3 +1,9 @@
+/*
+  note: you may need to modify app_timer.c to use SWI3 instead of SWI0, which is already used by nrf_esb.c
+  >> #define SWI_IRQn SWI3_IRQn
+  >> #define SWI_IRQHandler SWI3_IRQHandler
+*/
+
 #include "app_timer.h"
 #include "nrf_drv_clock.h"
 

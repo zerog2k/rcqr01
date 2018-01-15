@@ -1,4 +1,6 @@
 
+// SDK 12.3.0 docs link: http://infocenter.nordicsemi.com/topic/com.nordic.infocenter.sdk5.v12.3.0/index.html
+
 #define NRF51 1
 
 #include <stdbool.h>
@@ -10,9 +12,12 @@
 #include "nrf_log_ctrl.h"
 #include "SEGGER_RTT.h"
 
+#include "radio.h"
+
 #include "apptimers.h"
 #include "gfx.h"
 #include "ST7586.h"
+#include "vcc.h"
 
 #include "nrf_ic_info.h"
 nrf_ic_info_t *nrf_info;
@@ -131,8 +136,8 @@ int main(void)
 
   nrf_ic_info_get(nrf_info);
    char sbuf[128];
-   sprintf(sbuf, "icrev: %d, ram: %d, flash: %d, ramblks: %d", NRF_FICR->CONFIGID, nrf_info->ram_size, nrf_info->flash_size,  NRF_FICR->NUMRAMBLOCK);
-   gdispDrawString(0,20, sbuf, font_small, White);
+   sprintf(sbuf, "did1: 0x%x, did0: 0x%x, fl: %d, rb: %d", NRF_FICR->DEVICEID[1], NRF_FICR->DEVICEID[0], nrf_info->flash_size,  NRF_FICR->NUMRAMBLOCK);
+   gdispDrawString(0,20, sbuf, font_small, White);   
    
    /*
    gdispFillCircle(80, 80, 10, White);
@@ -140,10 +145,13 @@ int main(void)
    gdispDrawBox(330, 00, 10, 10, White);
    gdispDrawBox(0, 140, 20, 20, White);
   */
+
   gdispDrawString(0,40, "Hello lcd", font_med, White);
   gdispFlush();
 
   init_state = nrf_gpio_port_in_read(NRF_GPIO) & colmask;
+
+  radio_init();
 
   /// LOOP
   while (true)
@@ -204,6 +212,8 @@ int main(void)
         sprintf(sbuf, "col: %02d, row: %02d, c: %c", colidx, rowidx, c);
         NRF_LOG_INFO("col: %02d, row: %02d\n", col, row);
         gdispFillString(0,130, sbuf, font_med, White, Black);
+        // send char over radio
+        send_char(c);
         break;
       }
     }
@@ -217,6 +227,9 @@ int main(void)
 
     sprintf(sbuf, "elapsed: %8d", elapsed);
     gdispFillString(0, 60, sbuf, font_med, White, Black);
+
+    sprintf(sbuf, "batt: %3d",get_batt_level()*3);
+    gdispFillString(0, 80, sbuf, font_med, White, Black);
 
     /*
     gpio_state = nrf_gpio_port_in_read(NRF_GPIO) & colmask;

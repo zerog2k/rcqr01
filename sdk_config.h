@@ -576,13 +576,13 @@
 // <e> EGU_ENABLED - nrf_drv_swi - SWI(EGU) peripheral driver
 //==========================================================
 #ifndef EGU_ENABLED
-#define EGU_ENABLED 0
+#define EGU_ENABLED 1
 #endif
 #if  EGU_ENABLED
 // <e> SWI_CONFIG_LOG_ENABLED - Enables logging in the module.
 //==========================================================
 #ifndef SWI_CONFIG_LOG_ENABLED
-#define SWI_CONFIG_LOG_ENABLED 0
+#define SWI_CONFIG_LOG_ENABLED 1
 #endif
 #if  SWI_CONFIG_LOG_ENABLED
 // <o> SWI_CONFIG_LOG_LEVEL  - Default Severity level
