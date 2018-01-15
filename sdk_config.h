@@ -220,7 +220,7 @@
 // <e> ADC_ENABLED - nrf_drv_adc - Driver for ADC peripheral (nRF51)
 //==========================================================
 #ifndef ADC_ENABLED
-#define ADC_ENABLED 0
+#define ADC_ENABLED 1
 #endif
 #if  ADC_ENABLED
 // <o> ADC_CONFIG_IRQ_PRIORITY  - Interrupt priority
@@ -576,13 +576,13 @@
 // <e> EGU_ENABLED - nrf_drv_swi - SWI(EGU) peripheral driver
 //==========================================================
 #ifndef EGU_ENABLED
-#define EGU_ENABLED 0
+#define EGU_ENABLED 1
 #endif
 #if  EGU_ENABLED
 // <e> SWI_CONFIG_LOG_ENABLED - Enables logging in the module.
 //==========================================================
 #ifndef SWI_CONFIG_LOG_ENABLED
-#define SWI_CONFIG_LOG_ENABLED 0
+#define SWI_CONFIG_LOG_ENABLED 1
 #endif
 #if  SWI_CONFIG_LOG_ENABLED
 // <o> SWI_CONFIG_LOG_LEVEL  - Default Severity level
@@ -2125,7 +2125,7 @@
 // <2147483648=> 8 MHz 
 
 #ifndef SPI0_DEFAULT_FREQUENCY
-#define SPI0_DEFAULT_FREQUENCY 1073741824
+#define SPI0_DEFAULT_FREQUENCY 2147483648
 #endif
 
 #endif //SPI0_ENABLED

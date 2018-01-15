@@ -109,8 +109,8 @@ static GFXINLINE void write_data(GDisplay *g, uint8_t* data, uint16_t length) {
 	(void) length;
   nrf_gpio_pin_write(LCD_DC, 1);
   spi_xfer_done = false;
-  //APP_ERROR_CHECK(nrf_drv_spi_transfer(&spi, data, length, NULL, 0));
-  nrf_drv_spi_transfer(&spi, data, length, NULL, 0);
+  APP_ERROR_CHECK(nrf_drv_spi_transfer(&spi, data, length, NULL, 0));
+  //nrf_drv_spi_transfer(&spi, data, length, NULL, 0);
   while (!spi_xfer_done);
 }
 

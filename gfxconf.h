@@ -68,7 +68,7 @@
 #define GFX_USE_GDISP                                TRUE
 
 #define GDISP_NEED_AUTOFLUSH                         FALSE
-#define GDISP_NEED_TIMERFLUSH                        FALSE
+#define GDISP_NEED_TIMERFLUSH                        600
 #define GDISP_NEED_VALIDATION                        TRUE
 #define GDISP_NEED_CLIP                              TRUE
 #define GDISP_NEED_CIRCLE                            TRUE
@@ -255,7 +255,7 @@
 ///////////////////////////////////////////////////////////////////////////
 // GTIMER                                                                //
 ///////////////////////////////////////////////////////////////////////////
-//#define GFX_USE_GTIMER                               TRUE
+#define GFX_USE_GTIMER                               TRUE
 
 //#define GTIMER_THREAD_PRIORITY                       HIGH_PRIORITY
 //#define GTIMER_THREAD_WORKAREA_SIZE                  2048

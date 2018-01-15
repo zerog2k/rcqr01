@@ -1,4 +1,6 @@
 
+// SDK 12.3.0 docs link: http://infocenter.nordicsemi.com/topic/com.nordic.infocenter.sdk5.v12.3.0/index.html
+
 #define NRF51 1
 
 #include <stdbool.h>
@@ -10,9 +12,12 @@
 #include "nrf_log_ctrl.h"
 #include "SEGGER_RTT.h"
 
+#include "radio.h"
+
 #include "apptimers.h"
 #include "gfx.h"
 #include "ST7586.h"
+#include "adc_hal.h"
 
 #include "nrf_ic_info.h"
 nrf_ic_info_t *nrf_info;
@@ -83,7 +88,7 @@ uint8_t bitpos(uint32_t input)
 }
 
 
-char get_key_char_from_table(col, row)
+char get_key_char_from_table(uint8_t col, uint8_t row)
 {
   uint8_t idx = (col * 8) + row;
   return keytab[idx];
@@ -121,10 +126,6 @@ int main(void)
 
   NRF_LOG_INIT(NULL);
   tick_init();
-  
-  // test output pin 
-  
-  uint8_t outpin = 8 ;
  
   gfxInit();
   font_small = gdispOpenFont("fixed_7x14");
@@ -135,8 +136,8 @@ int main(void)
 
   nrf_ic_info_get(nrf_info);
    char sbuf[128];
-   sprintf(sbuf, "icrev: %d, ram: %d, flash: %d, ramblks: %d", NRF_FICR->CONFIGID, nrf_info->ram_size, nrf_info->flash_size,  NRF_FICR->NUMRAMBLOCK);
-   gdispDrawString(0,20, sbuf, font_small, White);
+   sprintf(sbuf, "did1: 0x%x, did0: 0x%x, fl: %d, rb: %d", NRF_FICR->DEVICEID[1], NRF_FICR->DEVICEID[0], nrf_info->flash_size,  NRF_FICR->NUMRAMBLOCK);
+   gdispDrawString(0,20, sbuf, font_small, White);   
    
    /*
    gdispFillCircle(80, 80, 10, White);
@@ -144,10 +145,14 @@ int main(void)
    gdispDrawBox(330, 00, 10, 10, White);
    gdispDrawBox(0, 140, 20, 20, White);
   */
+
   gdispDrawString(0,40, "Hello lcd", font_med, White);
   gdispFlush();
 
   init_state = nrf_gpio_port_in_read(NRF_GPIO) & colmask;
+
+  radio_init();
+  adc_init();
 
   /// LOOP
   while (true)
@@ -158,7 +163,7 @@ int main(void)
     //gdispControl(GDISP_CONTROL_INVERSE, 1);
     //gfxSleepMilliseconds(1000);
     //gdispControl(GDISP_CONTROL_INVERSE, 0);
-    nrf_delay_ms(100);
+    nrf_delay_ms(30);
 
     // pin experiments
     /*
@@ -208,17 +213,24 @@ int main(void)
         sprintf(sbuf, "col: %02d, row: %02d, c: %c", colidx, rowidx, c);
         NRF_LOG_INFO("col: %02d, row: %02d\n", col, row);
         gdispFillString(0,130, sbuf, font_med, White, Black);
+        // send char over radio
+        send_char(c);
         break;
       }
     }
 
+    
     elapsed = tick - elapsed;
+
 
     sprintf(sbuf, "hello lcd land, tick: %8d", tick);
     gdispFillString(0, 40, sbuf, font_med, White, Black);
 
     sprintf(sbuf, "elapsed: %8d", elapsed);
     gdispFillString(0, 60, sbuf, font_med, White, Black);
+
+    sprintf(sbuf, "batt: %3d", get_vcc());
+    gdispFillString(0, 80, sbuf, font_med, White, Black);
 
     /*
     gpio_state = nrf_gpio_port_in_read(NRF_GPIO) & colmask;
@@ -237,18 +249,19 @@ int main(void)
     init_diff = gpio_state ^ init_state;
     NRF_LOG_INFO("init  diff: 0x%08X, b: %d", init_diff, bitpos(init_diff));
 
-    sprintf(sbuf, "outpin: %d", outpin);
-    gdispFillString(0,130, sbuf, font_med, White, Black);
-
     NRF_LOG_INFO("row pin: %d\n", row_pins[rowidx]);
     */
 
     sprintf(sbuf, "draw delay: %d", drawdelay);
     gdispFillString(0,110, sbuf, font_med, White, Black);
 
-    drawdelay = tick;
-    gdispFlush();
-    drawdelay = tick - drawdelay;
+    if (pressed | elapsed > 10000)
+    {
+      drawdelay = tick;
+      gdispFlush();
+      drawdelay = tick - drawdelay;
+    }
+
     prev_state = gpio_state;
 
   }
