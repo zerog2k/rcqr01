@@ -28,15 +28,15 @@
  </Memory4>
  <Project>
   <ProjectSessionItem path="rcqr01_project"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;Application"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;Internal Files"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_Drivers"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_HAL"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_Libraries"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_proprietary_rf"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;System Files"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;uGFX"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;Application"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;Internal Files"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_Drivers"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_HAL"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_Libraries"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_proprietary_rf"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;System Files"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;uGFX"/>
   <SourceCodeControlLogin password="F9BB6682F5D56822" user=""/>
  </Project>
  <Register1>
@@ -77,11 +77,12 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="1227" useTextEdit="1" useBinaryEdit="0" left="0" path="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb.c" debugPath="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb.c" selected="0" top="1212" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="63" useTextEdit="1" useBinaryEdit="0" left="0" path="../../nRF5_SDK_12.3.0/components/libraries/timer/app_timer.c" debugPath="../../nRF5_SDK_12.3.0/components/libraries/timer/app_timer.c" selected="0" top="44" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="200" useTextEdit="1" useBinaryEdit="0" left="0" path="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb.h" debugPath="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb.h" selected="0" top="177" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="56" useTextEdit="1" useBinaryEdit="0" left="0" path="../../nRF5_SDK_12.3.0/components/libraries/util/sdk_common.h" debugPath="../../nRF5_SDK_12.3.0/components/libraries/util/sdk_common.h" selected="0" top="30" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="10" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" debugPath="src/main.c" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="57" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" debugPath="src/main.c" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/radio.h" debugPath="src/radio.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/adc_hal.h" debugPath="src/adc_hal.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/apptimers.h" debugPath="src/apptimers.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/sdk_config.h" debugPath="src/sdk_config.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="31" useTextEdit="1" useBinaryEdit="0" left="0" path="src/keypad.h" debugPath="src/keypad.h" selected="0" top="0" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="rcqr01_demo" fileDialogDefaultFilter="*.h" autoConnectTarget="J-Link" buildConfiguration="debug" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/rcqr01/ses_proj/src" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="rcqr01_demo1" fileDialogDefaultFilter="*.h" autoConnectTarget="J-Link" buildConfiguration="debug" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/rcqr01/ses_proj/src" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
