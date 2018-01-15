@@ -17,7 +17,7 @@
 #include "apptimers.h"
 #include "gfx.h"
 #include "ST7586.h"
-#include "vcc.h"
+#include "adc_hal.h"
 
 #include "nrf_ic_info.h"
 nrf_ic_info_t *nrf_info;
@@ -152,6 +152,7 @@ int main(void)
   init_state = nrf_gpio_port_in_read(NRF_GPIO) & colmask;
 
   radio_init();
+  adc_init();
 
   /// LOOP
   while (true)
@@ -228,7 +229,7 @@ int main(void)
     sprintf(sbuf, "elapsed: %8d", elapsed);
     gdispFillString(0, 60, sbuf, font_med, White, Black);
 
-    sprintf(sbuf, "batt: %3d",get_batt_level()*3);
+    sprintf(sbuf, "batt: %3d", get_vcc());
     gdispFillString(0, 80, sbuf, font_med, White, Black);
 
     /*

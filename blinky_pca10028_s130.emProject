@@ -62,7 +62,7 @@
       <file file_name="sdk_config.h" />
       <file file_name="apptimers.h" />
       <file file_name="radio.h" />
-      <file file_name="vcc.h" />
+      <file file_name="adc_hal.h" />
     </folder>
     <folder Name="nRF_Segger_RTT">
       <file file_name="$(NRF_SDK_DIR)/external/segger_rtt/RTT_Syscalls_IAR.c" />
@@ -96,6 +96,9 @@
       <file file_name="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb_error_codes.h" />
       <file file_name="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb_resources.h" />
       <file file_name="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb.c" />
+    </folder>
+    <folder Name="nRF_HAL">
+      <file file_name="../../nRF5_SDK_12.3.0/components/drivers_nrf/hal/nrf_adc.c" />
     </folder>
   </project>
   <configuration Name="debug" inherited_configurations="Internal" />

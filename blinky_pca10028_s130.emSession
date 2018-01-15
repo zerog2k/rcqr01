@@ -32,10 +32,12 @@
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;Application"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;Internal Files"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_Drivers"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_HAL"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_Libraries"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;nRF_proprietary_rf"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;System Files"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo;uGFX"/>
+  <SourceCodeControlLogin password="F9BB6682F5D56822" user=""/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="blinky_pca10028_s130" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -75,7 +77,7 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="263" useTextEdit="1" useBinaryEdit="0" left="0" path="main.c" debugPath="main.c" selected="1" top="244" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="17" y="19" useTextEdit="1" useBinaryEdit="0" left="0" path="main.c" debugPath="main.c" selected="0" top="70" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="19" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/st7586.h" debugPath="uGFX/drivers/gdisp/ST7586/st7586.h" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="156" useTextEdit="1" useBinaryEdit="0" left="0" path="gfxconf.h" debugPath="gfxconf.h" selected="0" top="140" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="55" useTextEdit="1" useBinaryEdit="0" left="0" path="board_ST7586.h" debugPath="board_ST7586.h" selected="0" top="0" codecName="Default"/>
@@ -86,8 +88,8 @@
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="63" useTextEdit="1" useBinaryEdit="0" left="0" path="../../nRF5_SDK_12.3.0/components/libraries/timer/app_timer.c" debugPath="../../nRF5_SDK_12.3.0/components/libraries/timer/app_timer.c" selected="0" top="44" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="196" useTextEdit="1" useBinaryEdit="0" left="0" path="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb.h" debugPath="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb.h" selected="0" top="177" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="88" useTextEdit="1" useBinaryEdit="0" left="0" path="radio.h" debugPath="radio.h" selected="0" top="84" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="384" useTextEdit="1" useBinaryEdit="0" left="0" path="sdk_config.h" debugPath="sdk_config.h" selected="0" top="365" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="4" useTextEdit="1" useBinaryEdit="0" left="0" path="vcc.h" debugPath="vcc.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="279" useTextEdit="1" useBinaryEdit="0" left="0" path="sdk_config.h" debugPath="sdk_config.h" selected="0" top="260" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="28" useTextEdit="1" useBinaryEdit="0" left="0" path="adc_hal.h" debugPath="adc_hal.h" selected="1" top="0" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="rcqr01_demo" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="debug" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/nRF5_SDK_12.3.0/components/proprietary_rf/esb" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="rcqr01_demo" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="debug" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/hal" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
