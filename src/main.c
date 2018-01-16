@@ -14,11 +14,12 @@
 
 #include "radio.h"
 #include "apptimers.h"
+//#include "rtc.h"    // experimentation w/ rtc - using app_timers instead for now
 #include "gfx.h"
 #include "ST7586.h"
 #include "adc_hal.h"
-
 #include "keypad.h"
+#include "sleep.h"
 
 #include "nrf_ic_info.h"
 nrf_ic_info_t *nrf_info;
@@ -33,11 +34,13 @@ nrf_ic_info_t *nrf_info;
 // LDO control pins
 #define MCP1256_PGOOD 14
 #define MCP1256_SLEEP 15
-#define MCP1256_SHUTDOWN  27
+#define MCP1256_ENABLE  27
 
-uint32_t elapsed, drawdelay = 0;
+uint32_t elapsed, prev_draw_time = 0;
 
-uint8_t i, c, lopin;
+uint8_t i, c, prev_keyscan, last_press_seconds = 0;
+
+sleep_mode_t sleep_mode = MODE_ACTIVE;
 
 systemticks_t gfxSystemTicks(void)
 {
@@ -55,20 +58,21 @@ font_t font_small, font_med;
 int main(void)
 {
 
-  keypad_init();
+  // initially tristate all col/row pins
+  nrf_gpio_range_cfg_input(0, 31, NRF_GPIO_PIN_NOPULL);
 
   // setup led/lcd/ldo
-
   nrf_gpio_cfg_output(MCP1256_SLEEP);
-  nrf_gpio_cfg_output(MCP1256_SHUTDOWN);
+  nrf_gpio_cfg_output(MCP1256_ENABLE);
   nrf_gpio_pin_write(MCP1256_SLEEP, 1);
-  nrf_gpio_pin_write(MCP1256_SHUTDOWN, 1);
+  nrf_gpio_pin_write(MCP1256_ENABLE, 1);  // SHUTDOWN pin, active low
   nrf_gpio_cfg_output(LCD_BACKLIGHT);
   nrf_gpio_pin_write(LCD_BACKLIGHT, 1);
 
   NRF_LOG_INIT(NULL);
-  tick_init();
- 
+  apptimers_init();
+  //rtc_init();
+
   gfxInit();
   font_small = gdispOpenFont("fixed_7x14");
   font_med = gdispOpenFont("fixed_10x20");
@@ -91,72 +95,110 @@ int main(void)
    gdispDrawBox(0, 00, 10, 10, White);
    gdispDrawBox(330, 00, 10, 10, White);
    gdispDrawBox(0, 140, 20, 20, White);
-  */
+  */      
 
   gdispDrawString(0,40, "Hello lcd", font_med, White);
   gdispFlush();
-
+                                                                                                                                                                     
   radio_init();
   adc_init();
+
+
 
   /// LOOP
   while (true)
   {
 
-    NRF_LOG_DEBUG("tick: %d\n", tick);
-    //gdispControl(GDISP_CONTROL_INVERSE, 1);
-    //gfxSleepMilliseconds(1000);
-    //gdispControl(GDISP_CONTROL_INVERSE, 0);
-    nrf_delay_ms(50);
-
-    elapsed = tick;
-
-    c = scan_keypad();
-    if (c) 
+    if (tick % 100 == 0)
     {
-      sprintf(sbuf, "char: %c", c);
-      gdispFillString(0,130, sbuf, font_med, White, Black);
-      // send char over radio
-      send_char(c);
-      switch (c) {
-         case 0xc1:
-          // config button
-          nrf_gpio_pin_toggle(LCD_BACKLIGHT);
-          break;
-         case 's':
-          // shutdown ldo to turn off lcd & led
-          nrf_gpio_pin_toggle(MCP1256_SHUTDOWN);
-          break;
+      // only run loop every 100 ms
+
+      NRF_LOG_DEBUG("tick: %d\n", tick);
+      //gdispControl(GDISP_CONTROL_INVERSE, 1);
+      //gfxSleepMilliseconds(1000);
+      //gdispControl(GDISP_CONTROL_INVERSE, 0);
+  
+      if (sleep_mode == MODE_WAKEUP)
+      {
+        sleep_timer = seconds;    // reset sleep timer
+        nrf_gpio_pin_write(MCP1256_ENABLE, 1);  // turn on lcd/led ldo
+        nrf_gpio_pin_write(LCD_BACKLIGHT, 1);
+        sleep_mode = MODE_ACTIVE;
+        continue;
       }
-    }
-    
-    elapsed = tick - elapsed;
 
-    sprintf(sbuf, "hello lcd land, tick: %8d", tick);
-    gdispFillString(0, 40, sbuf, font_med, White, Black);
+      if (sleep_mode == MODE_ACTIVE &&
+            (seconds - sleep_timer) > SLEEP_BACKLIGHT_DELAY)
+      {
+        // transition from ACTIVE to backlight off
+        nrf_gpio_pin_write(LCD_BACKLIGHT, 0);  // turn off lcd/led ldo
+        sleep_mode = MODE_SLEEP_BACKLIGHT;
+      }
 
-    sprintf(sbuf, "elapsed: %8d", elapsed);
-    gdispFillString(0, 60, sbuf, font_med, White, Black);
+      if (sleep_mode == MODE_SLEEP_BACKLIGHT &&
+            (seconds - sleep_timer) > SLEEP_DISPLAY_DELAY)
+      {
+        // transition from backlight to display off & sleep
+        nrf_gpio_pin_write(MCP1256_ENABLE, 0);  // turn off lcd/led ldo
+        sleep_mode = MODE_SLEEP_DISPLAY;
+        __WFE();
+        __SEV();
+        __WFE();
+      }
 
-    sprintf(sbuf, "batt: %3d", get_vcc());
-    gdispFillString(0, 80, sbuf, font_med, White, Black);
+      c = scan_keypad();
+      if (c)
+      {
+        if (sleep_mode == MODE_ACTIVE)
+        {
+            sleep_timer = seconds;    // reset sleep timer
+            elapsed = tick;
+            sprintf(sbuf, "char: %c", c);
+            gdispFillString(0,130, sbuf, font_med, White, Black);
+            // send char over radio
+            send_char(c);
+            // testing some power modes:
+            switch (c) {
+               case 0xc1:
+                // config button
+                nrf_gpio_pin_toggle(LCD_BACKLIGHT);
+                break;
+               case 's':
+                // shutdown ldo to turn off lcd & led
+                nrf_gpio_pin_toggle(MCP1256_ENABLE);
+                break;
+            }
+  
+            elapsed = tick - elapsed;
 
-    sprintf(sbuf, "draw delay: %d, RADIO: %x", drawdelay, NRF_RADIO->STATE);
-    gdispFillString(0,110, sbuf, font_med, White, Black);
+            sprintf(sbuf, "hello lcd land, tick: %8d", tick);
+            gdispFillString(0, 40, sbuf, font_med, White, Black);
 
-    if (c | elapsed > 10000)
-    {
-      drawdelay = tick;
-      gdispFlush();
-      drawdelay = tick - drawdelay;
-    }
+            sprintf(sbuf, "elapsed: %8d, secs: %4d", elapsed, seconds);
+            gdispFillString(0, 60, sbuf, font_med, White, Black);
 
-    // cpu sleep
-    __WFI();
-    __NOP();
+            sprintf(sbuf, "batt: %3d", get_vcc());
+            gdispFillString(0, 80, sbuf, font_med, White, Black);
 
+            sprintf(sbuf, "prev draw delay: %d", prev_draw_time);
+            gdispFillString(0,110, sbuf, font_med, White, Black);
+
+            prev_draw_time = tick;
+            gdispFlush();
+            prev_draw_time = tick - prev_draw_time;
+
+        } 
+        else if (sleep_mode < MODE_WAKEUP)
+        {
+            sleep_mode = MODE_WAKEUP;
+        }
+      }
+   }
+  // sleep - end of loop
+  __WFE();
+  __SEV();
+  __WFE();
   }
-
 }
 
 /**

@@ -29,12 +29,9 @@ char get_key_char_from_table(uint8_t col, uint8_t row)
   return keytab[idx];
 }
 
-void keypad_init(void)
+void keypad_on(void)
 {
   uint8_t i;
-  // initially tristate all col/row pins
-  nrf_gpio_range_cfg_input(8, 31, NRF_GPIO_PIN_NOPULL);
-
   // set cols to inputs
   for (i=0; i < sizeof(col_pins); i++)
     nrf_gpio_cfg_input(col_pins[i], NRF_GPIO_PIN_PULLUP);
@@ -46,10 +43,21 @@ void keypad_init(void)
   //nrf_gpio_range_cfg_output(17, 24, NRF_GPIO_PIN_NOPULL);
 }
 
+void keypad_off(void)
+{
+  uint8_t i;
+  for (i=0; i < sizeof(col_pins); i++)
+    nrf_gpio_cfg_input(col_pins[i], NRF_GPIO_PIN_NOPULL);
+
+  for (i=0; i < sizeof(row_pins); i++)
+    nrf_gpio_cfg_input(row_pins[i], NRF_GPIO_PIN_NOPULL);
+}
+
 char scan_keypad(void)
 {
     uint8_t c = 0;
     uint8_t rowidx, rowpin, colidx, colpin, pressed = 0;
+    keypad_on();
     // scan keypad, loop through rows
     pressed = 0;
     for (rowidx=0; rowidx < ROW_SIZE; rowidx++)
@@ -71,7 +79,7 @@ char scan_keypad(void)
 
       // set row back to input pullup
       nrf_gpio_cfg_input(rowpin, NRF_GPIO_PIN_PULLUP);
-      
+  
       if (pressed)
       {
         // keypress found, print col & row
@@ -80,5 +88,6 @@ char scan_keypad(void)
         break;
       }
     }
+    keypad_off();  
     return c;
 }
