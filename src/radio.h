@@ -152,18 +152,24 @@ uint32_t esb_init( void )
 void radio_init(void)
 {
     ret_code_t err_code;
-
-    //gpio_init();
-
-    err_code = NRF_LOG_INIT(NULL);
-    APP_ERROR_CHECK(err_code);
-
     clocks_start();
 
     err_code = esb_init();
-    nrf_esb_set_rf_channel(2);
+    APP_ERROR_CHECK(err_code);
+    err_code = nrf_esb_set_rf_channel(2);
     APP_ERROR_CHECK(err_code);
 
+}
+
+uint8_t get_channel(void)
+{
+  // note, gotta fix nrf sdk 12.3.0 bug w/ nrf_esb_rf_channel_get -> nrf_esb_get_rf_channel in nrf_esb.h  :(
+  // https://devzone.nordicsemi.com/question/103577/there-is-one-error-function-in-nrf5_sdk_1210_0d23e2a/
+  ret_code_t err_code;
+  uint32_t channel = 0;
+  err_code = nrf_esb_get_rf_channel(&channel);
+  APP_ERROR_CHECK(err_code);
+  return channel;
 }
 
 int send_char(char c)

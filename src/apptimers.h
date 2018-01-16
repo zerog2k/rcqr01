@@ -8,12 +8,11 @@
 #include "nrf_drv_clock.h"
 
 #define APP_TIMER_PRESCALER             0                     /**< Value of the RTC1 PRESCALER register. */
-#define APP_TIMER_MAX_TIMERS            4                     /**< Maximum number of simultaneously created timers. */
+//#define APP_TIMER_MAX_TIMERS            4                     /**< Maximum number of simultaneously created timers. */
 #define TIMER_TICKS		        APP_TIMER_TICKS(1, APP_TIMER_PRESCALER)
-#define DISPLAY_TIMER_TICKS	APP_TIMER_TICKS(600, APP_TIMER_PRESCALER)
 
 //For the queue size I used what was used for the example I copy/pasted.  There
-//is an explanation on the Nordic Devzon on the APP_TIMER_OP_QUEUE_SIZE
+//is an explanation on the Nordic Devzone on the APP_TIMER_OP_QUEUE_SIZE
 //https://devzone.nordicsemi.com/question/723/how-big-should-app_timer_op_queue_size-be/
 #define APP_TIMER_OP_QUEUE_SIZE         4                     /**< Size of timer operation queues. */
    /**< identifies this timer in the timer queue (only one in queue so...) */
@@ -25,8 +24,6 @@ static uint32_t tick = 0;
 static void tick_handler(void * p_context)
 {
   UNUSED_PARAMETER(p_context);
-  //SEGGER_RTT_WriteString (0, "--> in timeout handler\n");
-  //NRF_LOG_INFO("tick_handler, tick: %d\n", tick);
   tick++;
 }
 
@@ -35,9 +32,7 @@ static void tick_handler(void * p_context)
 static void lfclk_config(void)
 {
     ret_code_t err_code = nrf_drv_clock_init();
-    //nrf_clock_lf_src_set(NRF_CLOCK_LFCLK_Synth);
     APP_ERROR_CHECK(err_code);
-
     nrf_drv_clock_lfclk_request(NULL);
 }
 
@@ -47,16 +42,12 @@ static void lfclk_config(void)
  */
 static void tick_init(void)
 {
-  //initialize the low frequency cloc
+  //initialize the low frequency clock
 
   // Initialize timer module.
   APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_OP_QUEUE_SIZE, NULL);
 
   lfclk_config();
-
-  //NRF_CLOCK->TASKS_LFCLKSTART = 1;
-
-  //while (NRF_CLOCK->EVENTS_LFCLKSTARTED == 0);
 
   // Create timers.
   uint32_t err_code;

@@ -35,12 +35,9 @@ nrf_ic_info_t *nrf_info;
 #define MCP1256_SLEEP 15
 #define MCP1256_SHUTDOWN  27
 
-uint8_t rowidx, row, colidx, col, pressed = 0;
-
-uint32_t gpio_state, prev_state, state_diff, init_state, init_diff = 0;
 uint32_t elapsed, drawdelay = 0;
 
-uint8_t i, lopin;
+uint8_t i, c, lopin;
 
 systemticks_t gfxSystemTicks(void)
 {
@@ -55,22 +52,10 @@ systemticks_t gfxMillisecondsToTicks(delaytime_t ms)
 font_t font_small, font_med;
 
 
-
 int main(void)
 {
 
-  // initially tristate all col/row pins
-  nrf_gpio_range_cfg_input(8, 31, NRF_GPIO_PIN_NOPULL);
-
-  // set cols to inputs, pulldown
-  for (i=0; i < sizeof(col_pins); i++)
-    nrf_gpio_cfg_input(col_pins[i], NRF_GPIO_PIN_PULLUP);
-
-  // set rows to inputs, pullups (have external pullups)
-  for (i=0; i < sizeof(row_pins); i++)
-    nrf_gpio_cfg_input(row_pins[i], NRF_GPIO_PIN_PULLUP);
-  
-  //nrf_gpio_range_cfg_output(17, 24, NRF_GPIO_PIN_NOPULL);
+  keypad_init();
 
   // setup led/lcd/ldo
 
@@ -90,11 +75,15 @@ int main(void)
 
   //gdispControl(GDISP_CONTROL_ALL_PIXELS, 1);
   //gdispSetPowerMode(powerOn);
+  
+  char sbuf[128];
+  
+  sprintf(sbuf, "RFCH:%02d", get_channel());
+  gdispDrawString(0,0, sbuf, font_small, White);
 
   nrf_ic_info_get(nrf_info);
-   char sbuf[128];
-   sprintf(sbuf, "did1: 0x%x, did0: 0x%x, fl: %d, rb: %d", NRF_FICR->DEVICEID[1], NRF_FICR->DEVICEID[0], nrf_info->flash_size,  NRF_FICR->NUMRAMBLOCK);
-   gdispDrawString(0,20, sbuf, font_small, White);   
+  sprintf(sbuf, "did1: 0x%x, did0: 0x%x, fl: %d, rb: %d", NRF_FICR->DEVICEID[1], NRF_FICR->DEVICEID[0], nrf_info->flash_size,  NRF_FICR->NUMRAMBLOCK);
+  gdispDrawString(0,20, sbuf, font_small, White);   
    
    /*
    // some test graphics...
@@ -107,8 +96,6 @@ int main(void)
   gdispDrawString(0,40, "Hello lcd", font_med, White);
   gdispFlush();
 
-  init_state = nrf_gpio_port_in_read(NRF_GPIO) & colmask;
-
   radio_init();
   adc_init();
 
@@ -116,47 +103,30 @@ int main(void)
   while (true)
   {
 
-    //nrf_gpio_pin_toggle(LCD_BACKLIGHT);
     NRF_LOG_DEBUG("tick: %d\n", tick);
     //gdispControl(GDISP_CONTROL_INVERSE, 1);
     //gfxSleepMilliseconds(1000);
     //gdispControl(GDISP_CONTROL_INVERSE, 0);
-    nrf_delay_ms(30);
+    nrf_delay_ms(50);
 
     elapsed = tick;
 
-    // scan keypad, loop through rows
-    pressed = 0;
-    for (rowidx=0; rowidx < ROW_SIZE; rowidx++)
+    c = scan_keypad();
+    if (c) 
     {
-      // set row to output low
-      row = row_pins[rowidx];
-      nrf_gpio_cfg_output(row);
-      nrf_gpio_pin_write(row, 0);
-      // find col set low
-      for (colidx=0; colidx < COL_SIZE; colidx++)
-      {
-        col = col_pins[colidx];
-        if (nrf_gpio_pin_read(col) == 0)
-        {
-          pressed++;
+      sprintf(sbuf, "char: %c", c);
+      gdispFillString(0,130, sbuf, font_med, White, Black);
+      // send char over radio
+      send_char(c);
+      switch (c) {
+         case 0xc1:
+          // config button
+          nrf_gpio_pin_toggle(LCD_BACKLIGHT);
           break;
-        }
-      }
-
-      // set row back to input pullup
-      nrf_gpio_cfg_input(row, NRF_GPIO_PIN_PULLUP);
-      
-      if (pressed)
-      {
-        // keypress found, print col & row
-        uint8_t c = get_key_char_from_table(colidx, rowidx);
-        sprintf(sbuf, "col: %02d, row: %02d, c: %c", colidx, rowidx, c);
-        NRF_LOG_INFO("col: %02d, row: %02d\n", col, row);
-        gdispFillString(0,130, sbuf, font_med, White, Black);
-        // send char over radio
-        send_char(c);
-        break;
+         case 's':
+          // shutdown ldo to turn off lcd & led
+          nrf_gpio_pin_toggle(MCP1256_SHUTDOWN);
+          break;
       }
     }
     
@@ -171,17 +141,20 @@ int main(void)
     sprintf(sbuf, "batt: %3d", get_vcc());
     gdispFillString(0, 80, sbuf, font_med, White, Black);
 
-    sprintf(sbuf, "draw delay: %d", drawdelay);
+    sprintf(sbuf, "draw delay: %d, RADIO: %x", drawdelay, NRF_RADIO->STATE);
     gdispFillString(0,110, sbuf, font_med, White, Black);
 
-    if (pressed | elapsed > 10000)
+    if (c | elapsed > 10000)
     {
       drawdelay = tick;
       gdispFlush();
       drawdelay = tick - drawdelay;
     }
 
-    prev_state = gpio_state;
+    // cpu sleep
+    __WFI();
+    __NOP();
+
   }
 
 }

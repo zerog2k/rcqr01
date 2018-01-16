@@ -12,7 +12,7 @@ const uint32_t rowmask = BIT_8 | BIT_18 | BIT_19 | BIT_20 | BIT_21 | BIT_22 | BI
 const uint8_t col_pins[COL_SIZE] = { 9, 10, 11, 17, 25, 26, 28, 29 }; 
 const uint32_t colmask = BIT_9 | BIT_10 | BIT_11 | BIT_17 | BIT_25 | BIT_26 | BIT_28 | BIT_29;
 
-// keypad lookup table
+// keypad lookup table (cols/rows swapped here)
 const char keytab[64] = {   0x65, 0x73, 0x64, 0x78, 0xf2, 0x32, 0x33, 0x77,
                             0x72, 0x66, 0x76, 0x63, 0xf3, 0xd3, 0xd1, 0x34,
                             0x61, 0x7a, 0x5e, 0x25, 0xf1, 0xc0, 0x31, 0x71,
@@ -29,3 +29,56 @@ char get_key_char_from_table(uint8_t col, uint8_t row)
   return keytab[idx];
 }
 
+void keypad_init(void)
+{
+  uint8_t i;
+  // initially tristate all col/row pins
+  nrf_gpio_range_cfg_input(8, 31, NRF_GPIO_PIN_NOPULL);
+
+  // set cols to inputs
+  for (i=0; i < sizeof(col_pins); i++)
+    nrf_gpio_cfg_input(col_pins[i], NRF_GPIO_PIN_PULLUP);
+
+  // set rows to inputs, pullups (have external pullups)
+  for (i=0; i < sizeof(row_pins); i++)
+    nrf_gpio_cfg_input(row_pins[i], NRF_GPIO_PIN_PULLUP);
+  
+  //nrf_gpio_range_cfg_output(17, 24, NRF_GPIO_PIN_NOPULL);
+}
+
+char scan_keypad(void)
+{
+    uint8_t c = 0;
+    uint8_t rowidx, rowpin, colidx, colpin, pressed = 0;
+    // scan keypad, loop through rows
+    pressed = 0;
+    for (rowidx=0; rowidx < ROW_SIZE; rowidx++)
+    {
+      // set row to output low
+      rowpin = row_pins[rowidx];
+      nrf_gpio_cfg_output(rowpin);
+      nrf_gpio_pin_write(rowpin, 0);
+      // find col which is set low
+      for (colidx=0; colidx < COL_SIZE; colidx++)
+      {
+        colpin = col_pins[colidx];
+        if (nrf_gpio_pin_read(colpin) == 0)
+        {
+          pressed++;
+          break;
+        }
+      }
+
+      // set row back to input pullup
+      nrf_gpio_cfg_input(rowpin, NRF_GPIO_PIN_PULLUP);
+      
+      if (pressed)
+      {
+        // keypress found, print col & row
+        c = get_key_char_from_table(colidx, rowidx);
+        NRF_LOG_INFO("colpin: %02d, rowpin: %02, col: %02d, row: %02d\n", colpin, rowpin, colidx, rowidx);
+        break;
+      }
+    }
+    return c;
+}
