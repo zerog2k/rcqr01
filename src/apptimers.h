@@ -6,9 +6,9 @@
 
 #include "app_timer.h"
 #include "nrf_drv_clock.h"
+#include "low_power_pwm.h"
 
 #define APP_TIMER_PRESCALER            0                     /**< Value of the RTC1 PRESCALER register. */
-//#define APP_TIMER_MAX_TIMERS            4                     /**< Maximum number of simultaneously created timers. */
 #define TIMER_TICKS		        APP_TIMER_TICKS(1, APP_TIMER_PRESCALER)
 #define SECONDS_TICKS                   APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER)
 
@@ -23,6 +23,15 @@
 static uint32_t tick = 0;
 static uint32_t seconds = 0;
 
+// for display led pwm
+static low_power_pwm_t display_pwm;
+typedef enum  {
+  DISPLAY_OFF = 0,
+  DISPLAY_DIM = 30,
+  DISPLAY_MEDIUM = 70,
+  DISPLAY_BRIGHT = 100
+} brightness_levels_t;
+
 static void tick_handler(void * p_context)
 {
   UNUSED_PARAMETER(p_context);
@@ -35,7 +44,6 @@ static void seconds_handler(void * p_context)
   seconds++;
 }
 
-
 /** @brief Function starting the internal LFCLK XTAL oscillator.
  */
 static void lfclk_config(void)
@@ -45,12 +53,15 @@ static void lfclk_config(void)
     nrf_drv_clock_lfclk_request(NULL);
 }
 
+
 /**@brief Function for the Timer initialization.
  *
  * @details Initializes the timer module. This creates and starts application timers.
  */
 static void apptimers_init(void)
 {
+  low_power_pwm_config_t display_pwm_config;
+
   //initialize the low frequency clock
 
   // Initialize timer module.
@@ -60,22 +71,39 @@ static void apptimers_init(void)
 
   // Create timers.
   uint32_t err_code;
+  // 1ms tick timer
   APP_TIMER_DEF( m_timer_id );
   err_code = app_timer_create(&m_timer_id,
 			      APP_TIMER_MODE_REPEATED,
 			      tick_handler);
   APP_ERROR_CHECK(err_code);
 
+  // 1 second timer
   APP_TIMER_DEF( m_secondsticker_id );
   err_code = app_timer_create(&m_secondsticker_id,
 			      APP_TIMER_MODE_REPEATED,
 			      seconds_handler);
   APP_ERROR_CHECK(err_code);
 
+  // setup lcd backlight pwm timer
+  APP_TIMER_DEF( display_pwm_timer);
+  display_pwm_config.active_high    = true;
+  display_pwm_config.period         = 100;
+  display_pwm_config.bit_mask       = (1 << LCD_BACKLIGHT);
+  display_pwm_config.p_timer_id     = &display_pwm_timer;
+  display_pwm_config.p_port         = NRF_GPIO;
+
+  err_code = low_power_pwm_init(&display_pwm, &display_pwm_config, NULL);
+  APP_ERROR_CHECK(err_code);
+  err_code = low_power_pwm_duty_set(&display_pwm, DISPLAY_BRIGHT);
+  APP_ERROR_CHECK(err_code);
+
   // Start application timers.
   err_code = app_timer_start(m_timer_id, TIMER_TICKS, NULL);
   APP_ERROR_CHECK(err_code);
   err_code = app_timer_start(m_secondsticker_id, SECONDS_TICKS, NULL);
+  APP_ERROR_CHECK(err_code);
+  low_power_pwm_start(&display_pwm, display_pwm.bit_mask);
   APP_ERROR_CHECK(err_code);
 
 }

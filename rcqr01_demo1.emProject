@@ -33,7 +33,7 @@
       build_output_directory="_build"
       c_preprocessor_definitions=""
       c_user_include_directories=""
-      gcc_debugging_level="Level 1"
+      gcc_debugging_level="Level 2"
       gcc_optimization_level="Debug"
       macros=""
       speed="400" />
@@ -57,6 +57,7 @@
       <file file_name="$(NRF_SDK_DIR)/components/libraries/util/sdk_errors.c" />
       <file file_name="$(NRF_SDK_DIR)/components/libraries/ic_info/nrf_ic_info.c" />
       <file file_name="$(NRF_SDK_DIR)/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c" />
+      <file file_name="$(NRF_SDK_DIR)/components/libraries/low_power_pwm/low_power_pwm.c" />
     </folder>
     <folder Name="nRF_Drivers">
       <file file_name="$(NRF_SDK_DIR)/components/drivers_nrf/clock/nrf_drv_clock.c" />

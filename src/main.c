@@ -12,6 +12,19 @@
 #include "nrf_log_ctrl.h"
 #include "SEGGER_RTT.h"
 
+// eeprom pins
+#define EEP_CS  12
+#define EEP_SO  16
+#define EEP_SI  30
+#define EEP_CK   0
+
+#define LCD_BACKLIGHT 13
+
+// LDO control pins
+#define MCP1256_PGOOD 14
+#define MCP1256_SLEEP 15
+#define MCP1256_ENABLE  27
+
 #include "radio.h"
 #include "apptimers.h"
 //#include "rtc.h"    // experimentation w/ rtc - using app_timers instead for now
@@ -23,18 +36,6 @@
 
 #include "nrf_ic_info.h"
 nrf_ic_info_t *nrf_info;
-
-// eeprom pins
-#define EEP_CS  12
-#define EEP_SO  16
-#define EEP_SI  30
-#define EEP_CK   0
-
-#define LCD_BACKLIGHT 13
-// LDO control pins
-#define MCP1256_PGOOD 14
-#define MCP1256_SLEEP 15
-#define MCP1256_ENABLE  27
 
 uint32_t elapsed, prev_draw_time = 0;
 
@@ -66,8 +67,8 @@ int main(void)
   nrf_gpio_cfg_output(MCP1256_ENABLE);
   nrf_gpio_pin_write(MCP1256_SLEEP, 1);
   nrf_gpio_pin_write(MCP1256_ENABLE, 1);  // SHUTDOWN pin, active low
-  nrf_gpio_cfg_output(LCD_BACKLIGHT);
-  nrf_gpio_pin_write(LCD_BACKLIGHT, 1);
+  //nrf_gpio_cfg_output(LCD_BACKLIGHT);
+  //nrf_gpio_pin_write(LCD_BACKLIGHT, 1);
 
   NRF_LOG_INIT(NULL);
   apptimers_init();
@@ -122,7 +123,8 @@ int main(void)
       {
         sleep_timer = seconds;    // reset sleep timer
         nrf_gpio_pin_write(MCP1256_ENABLE, 1);  // turn on lcd/led ldo
-        nrf_gpio_pin_write(LCD_BACKLIGHT, 1);
+        //nrf_gpio_pin_write(LCD_BACKLIGHT, 1);
+        low_power_pwm_duty_set(&display_pwm, DISPLAY_MEDIUM);
         sleep_mode = MODE_ACTIVE;
         continue;
       }
@@ -131,7 +133,8 @@ int main(void)
             (seconds - sleep_timer) > SLEEP_BACKLIGHT_DELAY)
       {
         // transition from ACTIVE to backlight off
-        nrf_gpio_pin_write(LCD_BACKLIGHT, 0);  // turn off lcd/led ldo
+        //nrf_gpio_pin_write(LCD_BACKLIGHT, 0);  // turn off lcd/led ldo
+        low_power_pwm_duty_set(&display_pwm, DISPLAY_OFF);
         sleep_mode = MODE_SLEEP_BACKLIGHT;
       }
 
@@ -159,13 +162,24 @@ int main(void)
             send_char(c);
             // testing some power modes:
             switch (c) {
-               case 0xc1:
-                // config button
-                nrf_gpio_pin_toggle(LCD_BACKLIGHT);
+               case '+':
+                low_power_pwm_duty_set(&display_pwm, DISPLAY_BRIGHT);
+                break;
+               case 0x08:
+                // backspace
+                low_power_pwm_duty_set(&display_pwm, DISPLAY_DIM);
                 break;
                case 's':
                 // shutdown ldo to turn off lcd & led
                 nrf_gpio_pin_toggle(MCP1256_ENABLE);
+                break;
+               case 0xd1:
+                // left arrow, lower contrast
+                gdispSetContrast(gdispGetContrast() - 2);
+                break;
+               case 0xd2:
+                // right arrow, raise contrast
+                gdispSetContrast(gdispGetContrast() + 2);
                 break;
             }
   
