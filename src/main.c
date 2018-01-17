@@ -20,10 +20,10 @@
 
 #define LCD_BACKLIGHT 13
 
-// LDO control pins
+// LCD Boost converter/regulator control pins
 #define MCP1256_PGOOD 14
 #define MCP1256_SLEEP 15
-#define MCP1256_ENABLE  27
+#define MCP1256_ENABLE  27 // shutdown\
 
 #include "radio.h"
 #include "apptimers.h"
@@ -62,7 +62,7 @@ int main(void)
   // initially tristate all col/row pins
   nrf_gpio_range_cfg_input(0, 31, NRF_GPIO_PIN_NOPULL);
 
-  // setup led/lcd/ldo
+  // setup led/lcd regulator
   nrf_gpio_cfg_output(MCP1256_SLEEP);
   nrf_gpio_cfg_output(MCP1256_ENABLE);
   nrf_gpio_pin_write(MCP1256_SLEEP, 1);
@@ -109,20 +109,19 @@ int main(void)
   /// LOOP
   while (true)
   {
-
+    // only run loop every 100 ms
     if (tick % 100 == 0)
     {
-      // only run loop every 100 ms
-
       NRF_LOG_DEBUG("tick: %d\n", tick);
+      // playing with screen pixel inversion
       //gdispControl(GDISP_CONTROL_INVERSE, 1);
-      //gfxSleepMilliseconds(1000);
+      //nrf_delay_ms(500);
       //gdispControl(GDISP_CONTROL_INVERSE, 0);
   
       if (sleep_mode == MODE_WAKEUP)
       {
         sleep_timer = seconds;    // reset sleep timer
-        nrf_gpio_pin_write(MCP1256_ENABLE, 1);  // turn on lcd/led ldo
+        nrf_gpio_pin_write(MCP1256_ENABLE, 1);  // turn on lcd/led regulator
         //nrf_gpio_pin_write(LCD_BACKLIGHT, 1);
         low_power_pwm_duty_set(&display_pwm, DISPLAY_MEDIUM);
         sleep_mode = MODE_ACTIVE;
@@ -133,7 +132,7 @@ int main(void)
             (seconds - sleep_timer) > SLEEP_BACKLIGHT_DELAY)
       {
         // transition from ACTIVE to backlight off
-        //nrf_gpio_pin_write(LCD_BACKLIGHT, 0);  // turn off lcd/led ldo
+        //nrf_gpio_pin_write(LCD_BACKLIGHT, 0);  // turn off lcd/led regulator
         low_power_pwm_duty_set(&display_pwm, DISPLAY_OFF);
         sleep_mode = MODE_SLEEP_BACKLIGHT;
       }
@@ -142,7 +141,7 @@ int main(void)
             (seconds - sleep_timer) > SLEEP_DISPLAY_DELAY)
       {
         // transition from backlight to display off & sleep
-        nrf_gpio_pin_write(MCP1256_ENABLE, 0);  // turn off lcd/led ldo
+        nrf_gpio_pin_write(MCP1256_ENABLE, 0);  // turn off lcd/led regulator
         sleep_mode = MODE_SLEEP_DISPLAY;
         __WFE();
         __SEV();
@@ -170,7 +169,7 @@ int main(void)
                 low_power_pwm_duty_set(&display_pwm, DISPLAY_DIM);
                 break;
                case 's':
-                // shutdown ldo to turn off lcd & led
+                // shutdown regulator to turn off lcd & led
                 nrf_gpio_pin_toggle(MCP1256_ENABLE);
                 break;
                case 0xd1:
