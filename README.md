@@ -2,23 +2,23 @@
 Turning Technologies QT "clicker" (RCQR-01) hardware and software exploration (WIP).
 My adventures in reverse engineering an interesting platform.
 
-### hardware
+## hardware
 * based on nrf51822 (QFAA, 16kB ram, 256kB flash, Cortex M0)
 * low ram (non 32k model) makes it very tricky to run any BLE softdevice.
 
-#### Display
+### Display
  * lcd 360x160 ?, 2-bit grayscale ?
  * maybe ST7586 chipset? connected to serial bus. Use SPI to transfer data to chip.
  * hacked up uGFX framework
  * extremely wierd pixel column format (packed 3 2-bit pixels per byte)
- * no per-pixel modification, so using a framebuffer (consumes considerable amount of ram) and just flushing periodically to display chip
+ * no per-pixel modification, so using a 1bpp framebuffer (consumes considerable amount of ram) and just flushing periodically to display chip
    * may be able to optimize this down to a smaller row buffer, and for pixel-level or window modifications, just read and rewrite and "dirty" display lines
  * Microchip MCP1256 3.3v boost converter/regulator powers lcd stuff
  
-#### eeprom
+### eeprom
  * CAT25512 512-Kb SPI Serial CMOS EEPROM
  
-#### keyboard
+### keyboard
  * 8x8 matrix, qwerty style. Glow-in-the-dark keypad is a neat touch.
  * rows have external pullups?
  
@@ -43,20 +43,43 @@ My adventures in reverse engineering an interesting platform.
 | 14            | MCP1256_PGOOD | | 30            | EEP_SI        |
 | 15            | MCP1256_SLEEP |
 
+### programming
+see picture below
+### inside
+* unpopulated cortex debug connector pad - only vcc, gnd, swdio, swdclk populated
+#### battery compartment
+* test points pad pinout (from left to right - ignore the pins with the larger holes)
 
-### software
+| pad | destination |
+|-----|-------------|
+| 1   | SWDIO/nRST  |
+| 2   | SWDCLK      |
+| 3   | EEP_SO      |
+| 4   | EEP_SI      |
+| 5   | EEP_CLK     |
+| 6   | EEP_CS      |
+| 7   | P0.20 ?     |
+| 8   | P0.19 ?     |
+| 9   | GND         |
+| 10  | VCC 3V3     |
+
+## pics
+### pcb rear
+<img src="docs/rcqr01-03.jpg" width="400" />
+
+## software
 * using free, [cross-platform Segger Studio](https://www.segger.com/products/development-tools/embedded-studio/) (only tested on mac as of yet, linux testing to come)
 * using segger j-link for swd programming and debugging
 * setup path to the nrf51 sdk. Mine is `NRF_SDK_DIR=../../nRF5_SDK_12.3.0` as project macro (set on common configuration).
   * note below about needing to make two minor patches to sdk
 * display/ui framework is [uGFX](https://wiki.ugfx.io/index.php/Main_Page)
 
-### TODOs
+## TODOs
 * (maybe)implement display row-level buffering instead of huge frambuffer to save ram and draw/refresh time.
 * improve standby/sleep modes and decrease current draw. Currently get avg <1mA when display sleeping, which is good enough for me. (The 1ms timer tick is wasteful - maybe move to 10ms?)
 * uGFX offers menuing framework, look into implementing this
 
-### references
+## references
 
  * [nrf51822 product specification datasheet](http://infocenter.nordicsemi.com/pdf/nRF51822_PS_v3.1.pdf)
  * [nrf51 reference manual](http://infocenter.nordicsemi.com/pdf/nRF51_RM_v3.0.pdf)
