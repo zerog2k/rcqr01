@@ -2,6 +2,8 @@
 Turning Technologies QT "clicker" (RCQR-01) hardware and software exploration (WIP).
 My adventures in reverse engineering an interesting platform.
 
+<img src="docs/rcqr01-04.jpg" width="400" />
+
 ## hardware
 * based on nrf51822 (QFAA, 16kB ram, 256kB flash, Cortex M0)
 * low ram (non 32k model) makes it very tricky to run any BLE softdevice.
