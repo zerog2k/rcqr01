@@ -7,7 +7,7 @@
 #include "app_timer.h"
 #include "nrf_drv_clock.h"
 
-#define APP_TIMER_PRESCALER            4                     /**< Value of the RTC1 PRESCALER register. */
+#define APP_TIMER_PRESCALER            0                     /**< Value of the RTC1 PRESCALER register. */
 //#define APP_TIMER_MAX_TIMERS            4                     /**< Maximum number of simultaneously created timers. */
 #define TIMER_TICKS		        APP_TIMER_TICKS(1, APP_TIMER_PRESCALER)
 #define SECONDS_TICKS                   APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER)

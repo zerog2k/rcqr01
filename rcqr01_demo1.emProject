@@ -23,8 +23,8 @@
       project_type="Executable"
       speed="1000" />
     <folder Name="Internal Files">
-      <file file_name="../../nRF5_SDK_12.3.0/components/toolchain/embedded_studio/ses_nrf51_startup.s" />
-      <file file_name="../../nRF5_SDK_12.3.0/components/toolchain/system_nrf51.c" />
+      <file file_name="$(NRF_SDK_DIR)/components/toolchain/embedded_studio/ses_nrf51_startup.s" />
+      <file file_name="$(NRF_SDK_DIR)/components/toolchain/system_nrf51.c" />
       <file file_name="thumb_crt0.s" />
     </folder>
     <configuration
@@ -55,16 +55,16 @@
       <file file_name="$(NRF_SDK_DIR)/components/libraries/hardfault/hardfault_implementation.c" />
       <file file_name="$(NRF_SDK_DIR)/components/libraries/util/nrf_assert.c" />
       <file file_name="$(NRF_SDK_DIR)/components/libraries/util/sdk_errors.c" />
-      <file file_name="../../nRF5_SDK_12.3.0/components/libraries/ic_info/nrf_ic_info.c" />
-      <file file_name="../../nRF5_SDK_12.3.0/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c" />
+      <file file_name="$(NRF_SDK_DIR)/components/libraries/ic_info/nrf_ic_info.c" />
+      <file file_name="$(NRF_SDK_DIR)/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c" />
     </folder>
     <folder Name="nRF_Drivers">
       <file file_name="$(NRF_SDK_DIR)/components/drivers_nrf/clock/nrf_drv_clock.c" />
       <file file_name="$(NRF_SDK_DIR)/components/drivers_nrf/common/nrf_drv_common.c" />
       <file file_name="$(NRF_SDK_DIR)/components/drivers_nrf/uart/nrf_drv_uart.c" />
-      <file file_name="../../nRF5_SDK_12.3.0/components/drivers_nrf/spi_master/nrf_drv_spi.c" />
-      <file file_name="../../nRF5_SDK_12.3.0/components/drivers_nrf/spi_master/nrf_drv_spi.h" />
-      <file file_name="../../nRF5_SDK_12.3.0/components/drivers_nrf/rtc/nrf_drv_rtc.c">
+      <file file_name="$(NRF_SDK_DIR)/components/drivers_nrf/spi_master/nrf_drv_spi.c" />
+      <file file_name="$(NRF_SDK_DIR)/components/drivers_nrf/spi_master/nrf_drv_spi.h" />
+      <file file_name="$(NRF_SDK_DIR)/components/drivers_nrf/rtc/nrf_drv_rtc.c">
         <configuration Name="debug" build_exclude_from_build="Yes" />
         <configuration Name="release" build_exclude_from_build="Yes" />
       </file>
@@ -78,6 +78,10 @@
       <file file_name="src/keypad.h" />
       <file file_name="src/sleep.h" />
       <file file_name="src/rtc.h" />
+      <configuration
+        Name="Common"
+        gcc_c_language_standard="gnu11"
+        gcc_cplusplus_language_standard="gnu++11" />
     </folder>
     <folder Name="nRF_Segger_RTT">
       <file file_name="$(NRF_SDK_DIR)/external/segger_rtt/RTT_Syscalls_IAR.c" />
@@ -110,20 +114,21 @@
       <file file_name="flash_placement.xml" />
     </folder>
     <folder Name="nRF_proprietary_rf">
-      <file file_name="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb.h" />
-      <file file_name="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb_error_codes.h" />
-      <file file_name="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb_resources.h" />
-      <file file_name="../../nRF5_SDK_12.3.0/components/proprietary_rf/esb/nrf_esb.c" />
+      <file file_name="$(NRF_SDK_DIR)/components/proprietary_rf/esb/nrf_esb.h" />
+      <file file_name="$(NRF_SDK_DIR)/components/proprietary_rf/esb/nrf_esb_error_codes.h" />
+      <file file_name="$(NRF_SDK_DIR)/components/proprietary_rf/esb/nrf_esb_resources.h" />
+      <file file_name="$(NRF_SDK_DIR)/components/proprietary_rf/esb/nrf_esb.c" />
     </folder>
     <folder Name="nRF_HAL">
-      <file file_name="../../nRF5_SDK_12.3.0/components/drivers_nrf/hal/nrf_adc.c" />
+      <file file_name="$(NRF_SDK_DIR)/components/drivers_nrf/hal/nrf_adc.c" />
     </folder>
     <configuration
       Name="release"
       c_preprocessor_definitions="NRF_LOG_DEFAULT_LEVEL=0;NRF_LOG_BACKEND_SERIAL_USES_RTT=0"
       debug_enable_RTT="No"
+      gcc_c_language_standard="gnu11"
       gcc_debugging_level="None"
-      gcc_optimization_level="Level 1"
+      gcc_optimization_level="Level 2"
       speed="400" />
   </project>
   <configuration Name="debug" inherited_configurations="Internal" />

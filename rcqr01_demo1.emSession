@@ -34,11 +34,6 @@
   <ProjectSessionItem path="rcqr01_project"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo1"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;Application"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;Internal Files"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_Drivers"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_Libraries"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_SoftDevice"/>
-  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;uGFX"/>
   <SourceCodeControlLogin password="F9BB6682F5D56822" user=""/>
  </Project>
  <Register1>
@@ -83,12 +78,12 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="20" y="19" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" debugPath="src/main.c" selected="1" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="9" useTextEdit="1" useBinaryEdit="0" left="0" path="src/apptimers.h" debugPath="src/apptimers.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="5" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" debugPath="src/main.c" selected="1" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/keypad.h" debugPath="src/keypad.h" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/adc_hal.h" debugPath="src/adc_hal.h" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/radio.h" debugPath="src/radio.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/sleep.h" debugPath="src/sleep.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="15" useTextEdit="1" useBinaryEdit="0" left="0" path="src/sleep.h" debugPath="src/sleep.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="42" y="25" useTextEdit="1" useBinaryEdit="0" left="0" path="src/apptimers.h" debugPath="src/apptimers.h" selected="0" top="0" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="rcqr01_demo1" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="debug" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/rtc" debugSearchPath="" autoConnectCapabilities="3199"/>
+ <ARMCrossStudioWindow activeProject="rcqr01_demo1" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="release" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/nRF5_SDK_12.3.0/components/drivers_nrf/rtc" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>
