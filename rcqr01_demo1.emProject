@@ -21,7 +21,7 @@
       macros="NRF_SDK_DIR=../../nRF5_SDK_12.3.0"
       project_directory=""
       project_type="Executable"
-      speed="1000" />
+      speed="400" />
     <folder Name="Internal Files">
       <file file_name="$(NRF_SDK_DIR)/components/toolchain/embedded_studio/ses_nrf51_startup.s" />
       <file file_name="$(NRF_SDK_DIR)/components/toolchain/system_nrf51.c" />
@@ -36,7 +36,7 @@
       gcc_debugging_level="Level 2"
       gcc_optimization_level="Debug"
       macros=""
-      speed="400" />
+      speed="200" />
     <configuration
       Name="Internal"
       c_user_include_directories="$(PackagesDir)/CMSIS_4/CMSIS/Include" />
@@ -83,6 +83,7 @@
         Name="Common"
         gcc_c_language_standard="gnu11"
         gcc_cplusplus_language_standard="gnu++11" />
+      <file file_name="eeprom.h" />
     </folder>
     <folder Name="nRF_Segger_RTT">
       <file file_name="$(NRF_SDK_DIR)/external/segger_rtt/RTT_Syscalls_IAR.c" />

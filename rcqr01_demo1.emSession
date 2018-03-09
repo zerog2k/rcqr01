@@ -2,7 +2,7 @@
 <session>
  <Bookmarks/>
  <Breakpoints groups="Breakpoints" active_group="Breakpoints">
-  <Exceptions set="HardFault"/>
+  <BreakpointListItem trigger="" line="132" counter="0" hardwareBreakpoint="" isFunctionBreakpoint="false" action="" expression="" group="Breakpoints" type="Breakpoint" state="2" filename="src/main.c" useHWbreakpoint="false"/>
  </Breakpoints>
  <ExecutionProfileWindow/>
  <FrameBufferWindow>
@@ -12,7 +12,7 @@
   <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="blinky_pca10028_s130" radix="16" sizeText="" addressText=""/>
   <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="blinky_rcqr01" radix="16" sizeText="4" addressText="0x200004d8"/>
   <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="rcqr01_demo" radix="16" sizeText="" addressText=""/>
-  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="rcqr01_demo1" radix="16" sizeText="4" addressText="0xc5000000"/>
+  <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="rcqr01_demo1" radix="16" sizeText="4" addressText="0x20000290"/>
  </Memory1>
  <Memory2>
   <MemoryWindow addressSpace="" dataSize="1" autoEvaluate="0" viewMode="0" addressOrder="0" columnsText="" refreshPeriod="0" name="blinky_pca10028_s130" radix="16" sizeText="" addressText=""/>
@@ -36,6 +36,8 @@
   <ProjectSessionItem path="rcqr01_project"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo1"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;Application"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;Internal Files"/>
+  <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_Drivers"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_Libraries"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;nRF_Segger_RTT"/>
   <ProjectSessionItem path="rcqr01_project;rcqr01_demo1;uGFX"/>
@@ -70,7 +72,9 @@
  </TraceWindow>
  <Watch1>
   <Watches active="1" update="Never">
-   <Watchpoint numelements="0" expression="y" evalMode="0" name="y" radix="16" linenumber="236" filename="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" list=""/>
+   <Watchpoint numelements="16" expression="eepbuf" evalMode="2" name="eepbuf" radix="16" linenumber="133" filename="src/main.c" list=""/>
+   <Watchpoint numelements="0" expression="j" evalMode="0" name="j" radix="-1" linenumber="133" filename="src/main.c" list=""/>
+   <Watchpoint numelements="0" expression="nrf_info" evalMode="1" name="nrf_info" radix="16" linenumber="84" filename="src/main.c" list=""/>
   </Watches>
  </Watch1>
  <Watch2>
@@ -83,17 +87,20 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="37" y="185" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" debugPath="src/main.c" selected="1" top="165" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="16" y="112" useTextEdit="1" useBinaryEdit="0" left="0" path="src/main.c" debugPath="src/main.c" selected="1" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/keypad.h" debugPath="src/keypad.h" selected="0" top="0" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/adc_hal.h" debugPath="src/adc_hal.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/radio.h" debugPath="src/radio.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="165" useTextEdit="1" useBinaryEdit="0" left="0" path="src/radio.h" debugPath="src/radio.h" selected="0" top="46" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="15" useTextEdit="1" useBinaryEdit="0" left="0" path="src/sleep.h" debugPath="src/sleep.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="28" useTextEdit="1" useBinaryEdit="0" left="0" path="src/apptimers.h" debugPath="src/apptimers.h" selected="0" top="22" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/board_ST7586.h" debugPath="src/board_ST7586.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="39" y="332" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" debugPath="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" selected="0" top="316" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="19" y="56" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/st7586.h" debugPath="uGFX/drivers/gdisp/ST7586/st7586.h" selected="0" top="47" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/gfxconf.h" debugPath="src/gfxconf.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="1" useTextEdit="1" useBinaryEdit="0" left="0" path="src/apptimers.h" debugPath="src/apptimers.h" selected="0" top="61" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="56" useTextEdit="1" useBinaryEdit="0" left="0" path="src/board_ST7586.h" debugPath="src/board_ST7586.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="332" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" debugPath="uGFX/drivers/gdisp/ST7586/gdisp_lld_ST7586.c" selected="0" top="3" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="56" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/st7586.h" debugPath="uGFX/drivers/gdisp/ST7586/st7586.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="src/gfxconf.h" debugPath="src/gfxconf.h" selected="0" top="50" codecName="Default"/>
   <SessionOpenFile windowGroup="DockEditLeft" x="0" y="123" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/src/gdisp/gdisp.h" debugPath="uGFX/src/gdisp/gdisp.h" selected="0" top="104" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" useBinaryEdit="0" left="0" path="uGFX/drivers/gdisp/ST7586/gdisp_lld_config.h" debugPath="uGFX/drivers/gdisp/ST7586/gdisp_lld_config.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="116" useTextEdit="1" useBinaryEdit="0" left="0" path="eeprom.h" debugPath="eeprom.h" selected="0" top="15" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="2136" useTextEdit="1" useBinaryEdit="0" left="0" path="src/sdk_config.h" debugPath="src/sdk_config.h" selected="0" top="2110" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="rcqr01_demo1" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="debug" debugSearchFileMap="" fileDialogInitialDirectory="/Users/jens/build/nrf/nRF5_SDK_12.3.0/components/libraries/low_power_pwm" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

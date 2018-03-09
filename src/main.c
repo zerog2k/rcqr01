@@ -12,12 +12,6 @@
 #include "nrf_log_ctrl.h"
 #include "SEGGER_RTT.h"
 
-// eeprom pins
-#define EEP_CS  12
-#define EEP_SO  16
-#define EEP_SI  30
-#define EEP_CK   0
-
 #define LCD_BACKLIGHT 13
 
 // LCD Boost converter/regulator control pins
@@ -33,13 +27,17 @@
 #include "adc_hal.h"
 #include "keypad.h"
 #include "sleep.h"
+#include "eeprom.h"
 
 #include "nrf_ic_info.h"
-nrf_ic_info_t *nrf_info;
+nrf_ic_info_t nrf_info;
 
 uint32_t elapsed, prev_draw_time = 0;
 
 uint8_t i, c, prev_keyscan, last_press_seconds = 0;
+uint8_t eepbuf[16];
+uint16_t j;
+uint8_t contrast = 255;
 
 sleep_mode_t sleep_mode = MODE_ACTIVE;
 
@@ -57,7 +55,8 @@ font_t font_small, font_med;
 
 
 int main(void)
-{
+ {
+  nrf_delay_ms(1);
 
   // initially tristate all col/row pins
   nrf_gpio_range_cfg_input(0, 31, NRF_GPIO_PIN_NOPULL);
@@ -82,12 +81,11 @@ int main(void)
   //gdispSetPowerMode(powerOn);
   
   char sbuf[128];
-  
-  sprintf(sbuf, "RFCH:%02d", get_channel());
+  nrf_ic_info_get(&nrf_info);  
+  sprintf(sbuf, "RFCH:%02d, icrev: %d, flsz: %d, ramsz: %d", get_channel(), nrf_info.ic_revision, nrf_info.flash_size, nrf_info.ram_size);
   gdispDrawString(0,0, sbuf, font_small, White);
 
-  nrf_ic_info_get(nrf_info);
-  sprintf(sbuf, "did1: 0x%x, did0: 0x%x, fl: %d, rb: %d", NRF_FICR->DEVICEID[1], NRF_FICR->DEVICEID[0], nrf_info->flash_size,  NRF_FICR->NUMRAMBLOCK);
+  sprintf(sbuf, "did1: 0x%x, did0: 0x%x, rb: %d", NRF_FICR->DEVICEID[1], NRF_FICR->DEVICEID[0],  NRF_FICR->NUMRAMBLOCK);
   gdispDrawString(0,20, sbuf, font_small, White);   
    
    /*
@@ -105,7 +103,39 @@ int main(void)
   adc_init();
 
 
+   // EEPROM
+  eeprom_init();
 
+  eeprom_write_enable();
+  nrf_delay_ms(5);
+
+  /*
+  // test write:
+  eepbuf[0] = 0xab;
+  eepbuf[1] = 0xcd;
+  eepbuf[2] = 0xef;
+
+  eeprom_write(0, 3, eepbuf); // write eepbuf
+  memset(eepbuf, 0, 3); // clear eepbuf
+  nrf_delay_ms(5);
+  */
+  //eeprom_write_sr( 1<<IPL );
+  c = eeprom_read_sr();
+  NRF_LOG_INFO("eep_sr: %02x\n", c);
+  for (j=0; j<512; j+=16)
+  {
+    //eeprom_write_enable();
+    //eeprom_write_sr( 1 << IPL );
+    nrf_delay_ms(5);
+    c = eeprom_read_sr();
+    NRF_LOG_INFO("eep_sr: %02x\n", c);       
+    eeprom_read(j, 16, eepbuf);
+    
+    //NRF_LOG_INFO("j: %02x, eepbuf: %02x %02x %02x %02x\n", j, eepbuf[0], eepbuf[1], eepbuf[2], eepbuf[3]);
+    
+  }
+
+  contrast = gdispGetContrast();
   /// LOOP
   while (true)
   {
@@ -173,12 +203,14 @@ int main(void)
                 nrf_gpio_pin_toggle(MCP1256_ENABLE);
                 break;
                case 0xd1:
-                // left arrow, lower contrast
+                // left arrow, lower contrast                
                 gdispSetContrast(gdispGetContrast() - 2);
+                contrast = gdispGetContrast();
                 break;
                case 0xd2:
                 // right arrow, raise contrast
                 gdispSetContrast(gdispGetContrast() + 2);
+                contrast = gdispGetContrast();
                 break;
             }
   
@@ -193,7 +225,7 @@ int main(void)
             sprintf(sbuf, "batt: %3d", get_vcc());
             gdispFillString(0, 80, sbuf, font_med, White, Black);
 
-            sprintf(sbuf, "prev draw delay: %d", prev_draw_time);
+            sprintf(sbuf, "prev draw delay: %d, contrast: %d", prev_draw_time, contrast);
             gdispFillString(0,110, sbuf, font_med, White, Black);
 
             prev_draw_time = tick;
