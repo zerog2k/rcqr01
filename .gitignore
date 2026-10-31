@@ -6,3 +6,5 @@ disassembly
 .env
 .pio/
 .piolibdeps/
+.venv/
+.vscode/
