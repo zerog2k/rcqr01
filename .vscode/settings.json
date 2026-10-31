@@ -1,0 +1,32 @@
+{
+    "files.associations": {
+        "u8x8_d_ssd1306_128x64_noname.c": "cpp",
+        "u8x8_d_st7586s.c": "cpp",
+        "u8x8_cad.c": "cpp",
+        "u8g2_polygon.c": "cpp"
+    },
+    "chat.tools.terminal.autoApprove": {
+        "command": true,
+        "platformio": true,
+        "/^command -v pio \\|\\| command -v platformio \\|\\| python3 -m platformio --version$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python3 -m platformio run -e nrf51_rcqr01 -t nobuild$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd '/Users/jens/build/rcqr01' && python3 -m platformio run -e nrf51_rcqr01 -t nobuild$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd '/Users/jens/build/rcqr01' && python3 -m platformio run -e nrf51_rcqr01 -t envdump -vvvv$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd '/Users/jens/build/rcqr01' && python3 - <<'PY'\nimport os, re\nroot = os\\.path\\.expanduser\\('~/Library/Python/3\\.9/lib/python/site-packages/platformio'\\)\nfile=os\\.path\\.join\\(root,'builder/tools/piobuild\\.py'\\)\nwith open\\(file,'r',encoding='utf-8',errors='ignore'\\) as f:\n    text=f\\.read\\(\\)\nfor i,line in enumerate\\(text\\.splitlines\\(\\),1\\):\n    if 'ParseFlagsExtended' in line or 'env:' in line or 'env\\.' in line or 'env\\(' in line or 'get' in line and 'env' in line:\n        print\\(i, line\\)\nprint\\('---'\\)\nfor i,line in enumerate\\(text\\.splitlines\\(\\),1\\):\n    if 'ParseFlagsExtended' in line:\n        for j in range\\(i-3,i\\+20\\):\n            print\\(j, text\\.splitlines\\(\\)\\[j-1\\]\\)\n        break\nPY$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

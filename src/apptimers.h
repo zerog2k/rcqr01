@@ -7,6 +7,7 @@
 #include "app_timer.h"
 #include "nrf_drv_clock.h"
 #include "low_power_pwm.h"
+#include "nrf_delay.h"
 
 #define APP_TIMER_PRESCALER            0                     /**< Value of the RTC1 PRESCALER register. */
 #define TIMER_TICKS		        APP_TIMER_TICKS(1, APP_TIMER_PRESCALER)
@@ -49,8 +50,25 @@ static void seconds_handler(void * p_context)
 static void lfclk_config(void)
 {
     ret_code_t err_code = nrf_drv_clock_init();
-    APP_ERROR_CHECK(err_code);
+
+    if (err_code != NRF_SUCCESS)
+    {
+        APP_ERROR_CHECK(err_code);
+    }
+
     nrf_drv_clock_lfclk_request(NULL);
+
+    for (uint32_t wait_count = 0;
+         wait_count < 100 && !nrf_drv_clock_lfclk_is_running();
+         ++wait_count)
+    {
+        nrf_delay_ms(10);
+    }
+
+    if (!nrf_drv_clock_lfclk_is_running())
+    {
+        APP_ERROR_CHECK(NRF_ERROR_TIMEOUT);
+    }
 }
 
 
@@ -103,9 +121,7 @@ static void apptimers_init(void)
   APP_ERROR_CHECK(err_code);
   err_code = app_timer_start(m_secondsticker_id, SECONDS_TICKS, NULL);
   APP_ERROR_CHECK(err_code);
-  low_power_pwm_start(&display_pwm, display_pwm.bit_mask);
+  err_code = low_power_pwm_start(&display_pwm, display_pwm.bit_mask);
   APP_ERROR_CHECK(err_code);
 
 }
-
-

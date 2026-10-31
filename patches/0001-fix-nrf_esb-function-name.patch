@@ -1,0 +1,7 @@
+diff --git a/components/proprietary_rf/esb/nrf_esb.h b/components/proprietary_rf/esb/nrf_esb.h
+index 0000000..0000000 100644
+--- a/components/proprietary_rf/esb/nrf_esb.h
++++ b/components/proprietary_rf/esb/nrf_esb.h
+@@
+-uint32_t nrf_esb_rf_channel_get(uint32_t * p_channel);
++uint32_t nrf_esb_get_rf_channel(uint32_t * p_channel);

@@ -72,9 +72,34 @@ see picture below
 ## software
 * using free, [cross-platform Segger Studio](https://www.segger.com/products/development-tools/embedded-studio/) (only tested on mac as of yet, linux testing to come)
 * using segger j-link for swd programming and debugging
-* setup path to the nrf51 sdk. Mine is `NRF_SDK_DIR=../../nRF5_SDK_12.3.0` as project macro (set on common configuration).
-  * note below about needing to make two minor patches to sdk
+* setup path to the nrf51 sdk directly in `platformio.ini`.
+  * default path: `../nRF5_SDK_12.3.0_d7731ad`
+  * build with:
+    ```sh
+    python3 -m platformio run -e nrf51_rcqr01
+    ```
 * display/ui framework is [uGFX](https://wiki.ugfx.io/index.php/Main_Page)
+
+## SDK patches
+
+The project uses a real nRF5 SDK copy and requires two localized bug fixes. Patch the SDK copy before building if it has not already been updated.
+
+1. Fix the ESB channel getter name in `components/proprietary_rf/esb/nrf_esb.h`
+2. Use `SWI3` for the app timer handler in `components/libraries/timer/app_timer.c`
+
+The SDK root is configured directly in `platformio.ini` using the path:
+
+```ini
+../nRF5_SDK_12.3.0_d7731ad
+```
+
+The patches are stored under `patches/` and can be applied from the SDK root:
+
+```sh
+cd /path/to/nRF5_SDK_12.3.0_d7731ad
+patch -p1 < /path/to/rcqr01/patches/0001-fix-nrf_esb-function-name.patch
+patch -p1 < /path/to/rcqr01/patches/0002-fix-app_timer-swi3.patch
+```
 
 ## TODOs
 * (maybe)implement display row-level buffering instead of huge frambuffer to save ram and draw/refresh time.
@@ -86,12 +111,7 @@ see picture below
  * [nrf51822 product specification datasheet](http://infocenter.nordicsemi.com/pdf/nRF51822_PS_v3.1.pdf)
  * [nrf51 reference manual](http://infocenter.nordicsemi.com/pdf/nRF51_RM_v3.0.pdf)
  * [nordic nrf51 sdk 12.3.0](http://infocenter.nordicsemi.com/topic/com.nordic.infocenter.sdk5.v12.3.0/index.html)
-  * sdk bug needs patching: nrf_esb_rf_channel_get -> nrf_esb_get_rf_channel in nrf_esb.h
-  * modify app_timer.c to use SWI3 instead of SWI0, which is already used by nrf_esb.c
-  ```
-  #define SWI_IRQn SWI3_IRQn
-  #define SWI_IRQHandler SWI3_IRQHandler
-  ```
+  * this repo includes patch files under `patches/` for the two known SDK fixes used by the project
  * [CAT25512 datasheet](http://www.onsemi.com/pub/Collateral/CAT25512-D.PDF)
  * [ST7586 datasheet](https://www.buydisplay.com/download/ic/ST7586.pdf)
  * [MCP1256 datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/21989a.pdf)

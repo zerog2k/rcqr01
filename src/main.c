@@ -5,12 +5,14 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "SEGGER_RTT.h"
+
 #include "nrf.h"
 #include "nrf_delay.h"
 #include "nrf_gpio.h"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
-#include "SEGGER_RTT.h"
+
 
 #define LCD_BACKLIGHT 13
 
@@ -23,7 +25,7 @@
 #include "apptimers.h"
 //#include "rtc.h"    // experimentation w/ rtc - using app_timers instead for now
 #include "gfx.h"
-#include "ST7586.h"
+#include "st7586.h"
 #include "adc_hal.h"
 #include "keypad.h"
 #include "sleep.h"
@@ -56,7 +58,11 @@ font_t font_small, font_med;
 
 int main(void)
  {
-  nrf_delay_ms(1);
+  nrf_delay_ms(500);
+  SEGGER_RTT_Init();
+  nrf_delay_ms(500);
+  SEGGER_RTT_WriteString(0, "entered main\n");
+  nrf_delay_ms(10);
 
   // initially tristate all col/row pins
   nrf_gpio_range_cfg_input(0, 31, NRF_GPIO_PIN_NOPULL);
@@ -70,10 +76,13 @@ int main(void)
   //nrf_gpio_pin_write(LCD_BACKLIGHT, 1);
 
   NRF_LOG_INIT(NULL);
+  NRF_LOG_INFO("startup: log initialized\n");
   apptimers_init();
+  NRF_LOG_INFO("startup: timers initialized\n");
   //rtc_init();
 
   gfxInit();
+  NRF_LOG_INFO("startup: graphics initialized\n");
   font_small = gdispOpenFont("fixed_7x14");
   font_med = gdispOpenFont("fixed_10x20");
 
@@ -98,13 +107,17 @@ int main(void)
 
   gdispDrawString(0,40, "Hello lcd", font_med, White);
   gdispFlush();
-                                                                                                                                                                     
+  NRF_LOG_INFO("startup: display drawn\n");
+                                                                                                     
   radio_init();
+  NRF_LOG_INFO("startup: radio initialized\n");
   adc_init();
+  NRF_LOG_INFO("startup: adc initialized\n");
 
 
    // EEPROM
   eeprom_init();
+  NRF_LOG_INFO("startup: eeprom initialized\n");
 
   eeprom_write_enable();
   nrf_delay_ms(5);
@@ -121,21 +134,23 @@ int main(void)
   */
   //eeprom_write_sr( 1<<IPL );
   c = eeprom_read_sr();
-  NRF_LOG_INFO("eep_sr: %02x\n", c);
+  NRF_LOG_DEBUG("eep_sr: %02x\n", c);
   for (j=0; j<512; j+=16)
   {
     //eeprom_write_enable();
     //eeprom_write_sr( 1 << IPL );
     nrf_delay_ms(5);
     c = eeprom_read_sr();
-    NRF_LOG_INFO("eep_sr: %02x\n", c);       
+    NRF_LOG_DEBUG("eep_sr: %02x\n", c);       
     eeprom_read(j, 16, eepbuf);
     
     //NRF_LOG_INFO("j: %02x, eepbuf: %02x %02x %02x %02x\n", j, eepbuf[0], eepbuf[1], eepbuf[2], eepbuf[3]);
     
   }
 
+  NRF_LOG_INFO("startup: eeprom scan complete\n");
   contrast = gdispGetContrast();
+  NRF_LOG_INFO("startup: entering main loop\n");
   /// LOOP
   while (true)
   {

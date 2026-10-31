@@ -1,0 +1,21 @@
+{
+  "build": {
+    "cpu": "cortex-m0", 
+    "f_cpu": "16000000L", 
+    "mcu": "nrf51822"
+  },
+  "connectivity": [
+    "bluetooth"
+  ],
+  "frameworks": [
+    "arduino",
+    "zephyr"
+  ], 
+  "name": "rcqr01", 
+  "upload": {
+    "maximum_ram_size": 16384, 
+    "maximum_size": 262144
+  }, 
+  "url": "https://developer.mbed.org/platforms/Microbit/", 
+  "vendor": "Turning Technologies"
+}

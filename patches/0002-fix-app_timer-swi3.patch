@@ -1,0 +1,9 @@
+diff --git a/components/libraries/timer/app_timer.c b/components/libraries/timer/app_timer.c
+index 0000000..0000000 100644
+--- a/components/libraries/timer/app_timer.c
++++ b/components/libraries/timer/app_timer.c
+@@
+-#define SWI_IRQn SWI0_IRQn
+-#define SWI_IRQHandler SWI0_IRQHandler
++#define SWI_IRQn SWI3_IRQn
++#define SWI_IRQHandler SWI3_IRQHandler
