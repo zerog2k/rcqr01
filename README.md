@@ -11,10 +11,9 @@ My adventures in reverse engineering an interesting platform.
 ### Display
  * lcd 360x160 ?, 2-bit grayscale ?
  * maybe ST7586 chipset? connected to serial bus. Use SPI to transfer data to chip.
- * hacked up uGFX framework
- * extremely wierd pixel column format (packed 3 2-bit pixels per byte)
- * no per-pixel modification, so using a 1bpp framebuffer (consumes considerable amount of ram) and just flushing periodically to display chip
-   * may be able to optimize this down to a smaller row buffer, and for pixel-level or window modifications, just read and rewrite and "dirty" display lines
+ * custom u8g2/u8x8 driver for the ST7586
+ * unusual pixel column format (packed 3 pixels per byte)
+ * one-page 1bpp buffer, 360 bytes, to keep RAM usage low
  * Microchip MCP1256 3.3v boost converter/regulator powers lcd stuff
  
 ### eeprom
@@ -70,30 +69,45 @@ see picture below
 <img src="docs/rcqr01-03.jpg" width="400" />
 
 ## software
-* using free, [cross-platform Segger Studio](https://www.segger.com/products/development-tools/embedded-studio/) (only tested on mac as of yet, linux testing to come)
-* using segger j-link for swd programming and debugging
-* setup path to the nrf51 sdk directly in `platformio.ini`.
-  * default path: `../nRF5_SDK_12.3.0_d7731ad`
-  * build with:
-    ```sh
-    python3 -m platformio run -e nrf51_rcqr01
-    ```
-* display/ui framework is [uGFX](https://wiki.ugfx.io/index.php/Main_Page)
+* build system is VS Code + [PlatformIO](https://platformio.org/)
+* target environment is `nrf51_rcqr01_standalone`
+* use an external nRF5 SDK 12.3.0 checkout at `../nRF5_SDK_12.3.0_d7731ad`
+* build with:
+  ```sh
+  python3 -m platformio run -e nrf51_rcqr01_standalone
+  ```
+* use ST-Link for flashing/debugging; SEGGER RTT remains available for logging
+* display rendering uses [u8g2](https://github.com/olikraus/u8g2) with a project-specific ST7586 u8x8 driver
+
+### Graphics
+
+The display is initialized by `display_init()` in `src/display.c`. The custom
+`src/u8x8_d_st7586_rcqr01.c` driver handles the 360x160 panel geometry, the
+hidden controller columns, and the panel's three-pixels-per-byte format.
+Rendering uses u8g2 page mode with a 360-byte buffer. The application uses
+`u8g2_font_6x10_tf` for small text and `u8g2_font_10x20_tf` for larger text.
+
+The Nordic SDK sources required by PlatformIO are selected in
+`src/sdk_includes.c`. They are currently kept in the repository's
+`lib/nrf5_sdk/` subset, while headers, the linker script, and RTT files come
+from the external SDK checkout.
 
 ## SDK patches
 
-The project uses a real nRF5 SDK copy and requires two localized bug fixes. Patch the SDK copy before building if it has not already been updated.
+The project uses nRF5 SDK 12.3.0. The external SDK checkout currently contains
+the two compatibility fixes needed by this project:
 
 1. Fix the ESB channel getter name in `components/proprietary_rf/esb/nrf_esb.h`
 2. Use `SWI3` for the app timer handler in `components/libraries/timer/app_timer.c`
 
-The SDK root is configured directly in `platformio.ini` using the path:
+The SDK root is configured directly in `platformio.ini`:
 
 ```ini
 ../nRF5_SDK_12.3.0_d7731ad
 ```
 
-The patches are stored under `patches/` and can be applied from the SDK root:
+The historical patches remain under `patches/` for reference. They can be
+applied from the SDK root if a fresh, unmodified SDK checkout is used:
 
 ```sh
 cd /path/to/nRF5_SDK_12.3.0_d7731ad
@@ -102,9 +116,8 @@ patch -p1 < /path/to/rcqr01/patches/0002-fix-app_timer-swi3.patch
 ```
 
 ## TODOs
-* (maybe)implement display row-level buffering instead of huge frambuffer to save ram and draw/refresh time.
 * improve standby/sleep modes and decrease current draw. Currently get avg <1mA when display sleeping, which is good enough for me. (The 1ms timer tick is wasteful - maybe move to 10ms?)
-* uGFX offers menuing framework, look into implementing this
+* verify the current firmware on hardware with the display, keypad, radio, EEPROM, and RTT checklist in `docs/plans/u8g2-migration.md`
 
 ## references
 

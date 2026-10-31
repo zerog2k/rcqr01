@@ -1,4 +1,4 @@
-# Technical Migration Plan: uGFX → u8g2 (VS Code + PlatformIO)
+# Technical Migration Record: uGFX → u8g2 (VS Code + PlatformIO)
 
 **Target hardware** – Nordic nRF51822 (16 KB RAM, 256 KB Flash)
 
@@ -18,7 +18,9 @@
 | Full 1‑bpp framebuffer | 57 600 / 8 = 7 200 B (≈ 44 % of RAM) – **unacceptable** |
 | u8g2 page buffer (16‑line) | (360 × 16) / 8 = 720 B – saves ~6 KB RAM |
 
-The ST7586 packs three 2‑bit pixels per byte. u8g2 already implements the required packing in its `u8g2_Setup_st7586_jlx320160_1` constructor, so we no longer need a custom driver.
+The ST7586 uses an unusual three-pixels-per-byte format. The stock u8g2
+constructors do not match this 360x160 panel, so the project uses a custom
+u8x8 driver.
 
 ---
 
@@ -52,7 +54,7 @@ build_unflags = -Os
 ### Phase 1 – Remove the legacy uGFX stack [COMPLETED]
 1. Delete `src/gfx_mk.c`, `src/gdisp_lld_framebuffer.c`, `src/gfxconf.h`. **DONE**
 2. Delete the entire `uGFX/` directory. **DONE**
-3. Ensure `main.c` no longer includes `gfx.h`. **PENDING** (Will be handled in Phase 4)
+3. Ensure `main.c` no longer includes `gfx.h`. **DONE**
 
 ### Phase 2 – Add u8g2 glue code [COMPLETED]
 Create **src/u8g2_nrf51.c** and **src/u8g2_nrf51.h** containing the two callbacks required by u8g2:
@@ -90,7 +92,7 @@ Files created/changed:
 * `platformio.ini`: removed `-D U8G2_16BIT` (u8g2.h defines it itself; the
   redefinition warned on every compile).
 
-**Checkpoint:** `~/.platformio/penv/bin/platformio run -e nrf51_rcqr01_standalone`
+**Checkpoint:** `python3 -m platformio run -e nrf51_rcqr01_standalone`
 – all Phase-3 objects compile without errors/warnings. The build still fails in
 `src/main.c` (vestigial `#include "st7586.h"` + remaining `gdisp*` calls) –
 resolved in Phase 4.
@@ -132,7 +134,7 @@ Full build reports:
 No further trimming of fonts or UI code required. (Phase-2 note: also compare
 against the old build only if a baseline snapshot exists.)
 
-### Phase 6 – Test & debug [PENDING, next]
+### Phase 6 – Test & debug [PENDING HARDWARE VERIFICATION]
 Flash the binary and verify on hardware. Checklist:
 
 1. Flash: `~/.platformio/penv/bin/platformio run -e nrf51_rcqr01_standalone -t
@@ -162,7 +164,15 @@ These fonts are built‑in, require no extra memory, and closely resemble the pr
 
 ---
 
-## 5. Clean‑up & documentation [PENDING]
-* Delete/archival the `uGFX/` directory.
-* Update `README.md` with a **Graphics – u8g2** section describing the new init sequence and chosen fonts.
-* Commit the revised `platformio.ini`, new source files, and removal of the old uGFX files.
+## 5. Cleanup & documentation [COMPLETED]
+
+The legacy SEGGER Embedded Studio project/session files, uGFX-specific source
+files, framebuffer configuration, custom startup file, and Travis scaffold have
+been removed. The repository documentation now describes the PlatformIO/u8g2
+workflow.
+
+The current build still keeps a selected SDK source subset in `lib/nrf5_sdk/`.
+The full SDK checkout remains external at
+`../nRF5_SDK_12.3.0_d7731ad/`; moving `sdk_includes.c` to compile those sources
+directly from that checkout is a separate cleanup option, not part of the u8g2
+migration.

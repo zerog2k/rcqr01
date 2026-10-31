@@ -5,17 +5,18 @@
 - ARM Cortex-M0 (ARMv6-M), little-endian, soft-float ABI
 
 ## IDE & Build System
-- **SEGGER Embedded Studio** (`.emProject` project file) — primary IDE and build tool
-- **PlatformIO** — CI/Travis integration scaffolded but not actively used
-- Build output goes to `_build/` directory
-- Two build configurations: `debug` (optimization off, RTT enabled) and `release` (O2, RTT/logging disabled)
+- **VS Code + PlatformIO** — current build and debug workflow
+- Build environment: `nrf51_rcqr01_standalone`
+- Build output goes to `.pio/build/`
+- SEGGER Embedded Studio project/session files and Travis configuration are obsolete and removed
 
 ## SDK & Dependencies
-- **Nordic nRF5 SDK 12.3.0** — referenced via `NRF_SDK_DIR` project macro (default: `../../nRF5_SDK_12.3.0`)
-  - Required SDK patches:
-    1. `nrf_esb.h`: rename `nrf_esb_rf_channel_get` → `nrf_esb_get_rf_channel`
-    2. `app_timer.c`: change `SWI_IRQn`/`SWI_IRQHandler` to use `SWI3` instead of `SWI0`
-- **uGFX** — display/UI framework, included as a git submodule (`uGFX/`), forked at `zerog2k/uGFX`
+- **Nordic nRF5 SDK 12.3.0** — external checkout at `../nRF5_SDK_12.3.0_d7731ad`
+  - Provides headers, linker files, RTT, and the SDK tree used by the build
+  - Selected SDK source files are currently mirrored under `lib/nrf5_sdk/` and compiled by `src/sdk_includes.c`
+  - The external checkout contains the ESB getter and app-timer SWI3 compatibility fixes
+- **u8g2** — display rendering library from PlatformIO
+- **Custom u8x8 ST7586 driver** — project-specific 360x160 LCD transport and packing
 - **SEGGER RTT** — used for debug logging (via `NRF_LOG` macros backed by RTT in debug builds)
 
 ## Key Libraries Used (from SDK)
@@ -27,19 +28,16 @@
 - `nrf_log` / `SEGGER_RTT` — logging
 
 ## Preprocessor Defines
-- `NRF51822`, `NRF51`, `SWI_DISABLE0` (common)
-- Release adds: `NRF_LOG_DEFAULT_LEVEL=0`, `NRF_LOG_BACKEND_SERIAL_USES_RTT=0`
+- `NRF51822`, `NRF51`
+- `U8G2_WITH_CLIP_WINDOW`
 
 ## Programming & Debugging
-- **SEGGER J-Link** via SWD (SWDIO/SWDCLK exposed on battery compartment test pads)
-- RTT viewer for log output in debug builds
+- **ST-Link** via SWD (SWDIO/SWDCLK exposed on battery compartment test pads)
+- SEGGER RTT/OpenOCD for log output during debugging
 - Flash target: `nRF51822_xxAA` (256 KB flash, 16 KB RAM)
 
 ## Common Commands
-All build/flash operations are done inside Segger Embedded Studio — there is no standalone CLI build system in use. Use the IDE's Build, Clean, and Download commands.
-
-For PlatformIO (if adopted):
 ```sh
-platformio run              # build
-platformio run --target upload  # flash
+python3 -m platformio run -e nrf51_rcqr01_standalone
+python3 -m platformio run -e nrf51_rcqr01_standalone -t upload
 ```
