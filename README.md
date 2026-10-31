@@ -72,6 +72,11 @@ see picture below
 * build system is VS Code + [PlatformIO](https://platformio.org/)
 * target environment is `nrf51_rcqr01_standalone`
 * use an external nRF5 SDK 12.3.0 checkout at `../nRF5_SDK_12.3.0_d7731ad`
+* prepare and verify the SDK once:
+  ```sh
+  python3 scripts/setup_sdk.py
+  ```
+  Set `NRF_SDK_DIR` in `.env` or pass `--sdk /path/to/sdk` if it is elsewhere.
 * build with:
   ```sh
   python3 -m platformio run -e nrf51_rcqr01_standalone
@@ -88,32 +93,28 @@ Rendering uses u8g2 page mode with a 360-byte buffer. The application uses
 `u8g2_font_6x10_tf` for small text and `u8g2_font_10x20_tf` for larger text.
 
 The Nordic SDK sources required by PlatformIO are selected in
-`src/sdk_includes.c`. They are currently kept in the repository's
-`lib/nrf5_sdk/` subset, while headers, the linker script, and RTT files come
-from the external SDK checkout.
+`src/sdk_includes.c` and compiled directly from the external SDK checkout.
+The PlatformIO pre-build script validates the SDK path and configures all
+include and linker paths from the same root.
 
 ## SDK patches
 
-The project uses nRF5 SDK 12.3.0. The external SDK checkout currently contains
+The project uses nRF5 SDK 12.3.0. `scripts/setup_sdk.py` applies and verifies
 the two compatibility fixes needed by this project:
 
 1. Fix the ESB channel getter name in `components/proprietary_rf/esb/nrf_esb.h`
 2. Use `SWI3` for the app timer handler in `components/libraries/timer/app_timer.c`
 
-The SDK root is configured directly in `platformio.ini`:
+The SDK root defaults to:
 
-```ini
+```text
 ../nRF5_SDK_12.3.0_d7731ad
 ```
 
-The historical patches remain under `patches/` for reference. They can be
-applied from the SDK root if a fresh, unmodified SDK checkout is used:
-
-```sh
-cd /path/to/nRF5_SDK_12.3.0_d7731ad
-patch -p1 < /path/to/rcqr01/patches/0001-fix-nrf_esb-function-name.patch
-patch -p1 < /path/to/rcqr01/patches/0002-fix-app_timer-swi3.patch
-```
+Set `NRF_SDK_DIR` in `.env`, or pass `--sdk` to the setup script, to use a
+different checkout. The historical patches remain under `patches/` as
+documentation of the required changes; the setup script applies the equivalent
+edits idempotently.
 
 ## TODOs
 * improve standby/sleep modes and decrease current draw. Currently get avg <1mA when display sleeping, which is good enough for me. (The 1ms timer tick is wasteful - maybe move to 10ms?)
@@ -124,7 +125,7 @@ patch -p1 < /path/to/rcqr01/patches/0002-fix-app_timer-swi3.patch
  * [nrf51822 product specification datasheet](http://infocenter.nordicsemi.com/pdf/nRF51822_PS_v3.1.pdf)
  * [nrf51 reference manual](http://infocenter.nordicsemi.com/pdf/nRF51_RM_v3.0.pdf)
  * [nordic nrf51 sdk 12.3.0](http://infocenter.nordicsemi.com/topic/com.nordic.infocenter.sdk5.v12.3.0/index.html)
-  * this repo includes patch files under `patches/` for the two known SDK fixes used by the project
+   * this repo includes patch files under `patches/` for the two known SDK fixes used by the project
  * [CAT25512 datasheet](http://www.onsemi.com/pub/Collateral/CAT25512-D.PDF)
  * [ST7586 datasheet](https://www.buydisplay.com/download/ic/ST7586.pdf)
  * [MCP1256 datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/21989a.pdf)

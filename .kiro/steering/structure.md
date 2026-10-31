@@ -13,14 +13,13 @@ rcqr01/
 │   ├── u8g2_nrf51.c/.h     # nRF51 SPI and GPIO callbacks for u8g2
 │   ├── u8x8_d_st7586_rcqr01.c/.h # Custom 360x160 ST7586 driver
 │   ├── board_ST7586.h      # Board-level pin/config for ST7586 LCD driver
-│   ├── sdk_includes.c      # Selected nRF5 SDK source compilation unit
+│   ├── sdk_includes.c      # Selected external nRF5 SDK source compilation unit
 │   └── sdk_config.h        # Nordic SDK peripheral/module enable flags
 ├── eeprom.h                # CAT25512 SPI EEPROM driver (at root, not src/)
-├── lib/nrf5_sdk/           # Selected SDK source subset used by sdk_includes.c
 ├── boards/
 │   └── rcqr01.json         # PlatformIO board definition
 ├── docs/                   # Hardware photos and reference images
-└── scripts/                # PlatformIO environment and RTT/debug helpers
+└── scripts/                # SDK setup, PlatformIO, and RTT/debug helpers
 ```
 
 ## Conventions

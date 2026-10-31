@@ -171,8 +171,8 @@ files, framebuffer configuration, custom startup file, and Travis scaffold have
 been removed. The repository documentation now describes the PlatformIO/u8g2
 workflow.
 
-The current build still keeps a selected SDK source subset in `lib/nrf5_sdk/`.
 The full SDK checkout remains external at
-`../nRF5_SDK_12.3.0_d7731ad/`; moving `sdk_includes.c` to compile those sources
-directly from that checkout is a separate cleanup option, not part of the u8g2
-migration.
+`../nRF5_SDK_12.3.0_d7731ad/`. `scripts/setup_sdk.py` prepares and validates
+the checkout, while `scripts/configure_sdk.py` supplies the same SDK root to
+PlatformIO for headers, source files, RTT, and the linker script. No SDK source
+mirror is kept in this repository.

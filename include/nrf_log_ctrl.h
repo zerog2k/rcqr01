@@ -1,6 +1,13 @@
 #ifndef RCQR_NRF_LOG_CTRL_FORWARDER_H
 #define RCQR_NRF_LOG_CTRL_FORWARDER_H
 
-#include "../nRF5_SDK_12.3.0_d7731ad/components/libraries/log/nrf_log_ctrl.h"
+#ifndef NRF_SDK_DIR
+#error "NRF_SDK_DIR must point to an nRF5 SDK checkout"
+#endif
+
+#define RCQR_STRINGIFY_IMPL(value) #value
+#define RCQR_STRINGIFY(value) RCQR_STRINGIFY_IMPL(value)
+
+#include RCQR_STRINGIFY(NRF_SDK_DIR/components/libraries/log/nrf_log_ctrl.h)
 
 #endif // RCQR_NRF_LOG_CTRL_FORWARDER_H

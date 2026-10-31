@@ -12,9 +12,9 @@
 
 ## SDK & Dependencies
 - **Nordic nRF5 SDK 12.3.0** — external checkout at `../nRF5_SDK_12.3.0_d7731ad`
-  - Provides headers, linker files, RTT, and the SDK tree used by the build
-  - Selected SDK source files are currently mirrored under `lib/nrf5_sdk/` and compiled by `src/sdk_includes.c`
-  - The external checkout contains the ESB getter and app-timer SWI3 compatibility fixes
+  - Provides headers, source files, linker files, and RTT
+  - `src/sdk_includes.c` compiles the selected SDK sources directly from this checkout
+  - `scripts/setup_sdk.py` applies and verifies the ESB getter and app-timer SWI3 compatibility fixes
 - **u8g2** — display rendering library from PlatformIO
 - **Custom u8x8 ST7586 driver** — project-specific 360x160 LCD transport and packing
 - **SEGGER RTT** — used for debug logging (via `NRF_LOG` macros backed by RTT in debug builds)
@@ -41,3 +41,12 @@
 python3 -m platformio run -e nrf51_rcqr01_standalone
 python3 -m platformio run -e nrf51_rcqr01_standalone -t upload
 ```
+
+Before the first build, prepare the external SDK:
+
+```sh
+python3 scripts/setup_sdk.py
+```
+
+Set `NRF_SDK_DIR` in `.env` or pass `--sdk /path/to/sdk` to use a non-default
+location.
