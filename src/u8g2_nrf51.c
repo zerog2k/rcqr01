@@ -80,8 +80,19 @@ uint8_t u8x8_byte_nrf51_hw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void 
         case U8X8_MSG_BYTE_SET_DC:
             nrf_gpio_pin_write(u8x8->pins[U8X8_PIN_DC], arg_int);
             break;
+        case U8X8_MSG_BYTE_START_TRANSFER:
+            /* Assert CS. Without this u8g2 sends command/data bytes while the
+               panel is deselected and the display ignores the whole init
+               sequence as well as every subsequent tile write. */
+            u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_enable_level);
+            break;
+        case U8X8_MSG_BYTE_END_TRANSFER:
+            u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
+            break;
         case U8X8_MSG_BYTE_INIT:
-            // SPI initialization is handled globally in board_ST7586.h or main
+            /* SPI itself is initialized by st7586_board_init(); make sure
+               the panel starts out deselected. */
+            u8x8_gpio_SetCS(u8x8, u8x8->display_info->chip_disable_level);
             break;
         default:
             return 0;

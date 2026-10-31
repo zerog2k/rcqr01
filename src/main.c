@@ -1,5 +1,5 @@
 // Turning Technologies RCQR-01 demo app
-// Jens Jensen 2017
+// Jens Jensen 2017,2026
 
 // SDK 12.3.0 docs link: http://infocenter.nordicsemi.com/topic/com.nordic.infocenter.sdk5.v12.3.0/index.html
 
@@ -44,31 +44,43 @@ sleep_mode_t sleep_mode = MODE_ACTIVE;
 
 /* full-screen status redraw, replacing the old set of gdispFillString calls */
 static void render_status(char key, uint32_t el,
-                          uint32_t secs, uint8_t batt,
-                          uint32_t draw_delay, uint8_t ctr)
+                          uint32_t secs, int16_t batt,
+                          uint32_t draw_delay, uint8_t contrast)
 {
-  char sbuf[48];
+  char line_char[16];
+  char line_tick[48];
+  char line_elapsed[48];
+  char line_batt[16];
+  char line_delay[48];
+
+  /*
+   * Snapshot and format all dynamic values once, before the page loop.
+   * u8g2 page mode calls DrawStr() once per 8-line page; formatting inside
+   * the loop re-reads tick/seconds/get_vcc() for every page.  Since a full
+   * screen update takes several milliseconds, different pages of the same
+   * glyph could be rendered with different values, which looks like
+   * corrupted/torn digits.
+   */
+  sprintf(line_char,    "char: %c", key);
+  sprintf(line_tick,    "hello lcd land, tick: %8lu", (unsigned long)tick);
+  sprintf(line_elapsed, "elapsed: %8lu, secs: %4lu",
+          (unsigned long)el, (unsigned long)secs);
+  sprintf(line_batt,    "batt: %3u", (unsigned)batt);
+  /* keep this line within the 360 px display width */
+  sprintf(line_delay,   "delay: %lu, contrast: %u",
+          (unsigned long)draw_delay, (unsigned)contrast);
+
+  u8g2_SetFont(&u8g2, u8g2_font_10x20_tf);
+  u8g2_SetFontMode(&u8g2, 0);
 
   u8g2_ClearBuffer(&u8g2);
   u8g2_FirstPage(&u8g2);
   do {
-    u8g2_SetFont(&u8g2, u8g2_font_10x20_tf);
-    u8g2_SetFontMode(&u8g2, 0);
-
-    sprintf(sbuf, "char: %c", key);
-    u8g2_DrawStr(&u8g2, 0, 130, sbuf);
-
-    sprintf(sbuf, "hello lcd land, tick: %8lu", (unsigned long)tick);
-    u8g2_DrawStr(&u8g2, 0, 40, sbuf);
-
-    sprintf(sbuf, "elapsed: %8lu, secs: %4lu", (unsigned long)el, (unsigned long)secs);
-    u8g2_DrawStr(&u8g2, 0, 60, sbuf);
-
-    sprintf(sbuf, "batt: %3u", (unsigned)batt);
-    u8g2_DrawStr(&u8g2, 0, 80, sbuf);
-
-    sprintf(sbuf, "prev draw delay: %lu, contrast: %u", (unsigned long)draw_delay, (unsigned)ctr);
-    u8g2_DrawStr(&u8g2, 0, 110, sbuf);
+    u8g2_DrawStr(&u8g2, 0, 130, line_char);
+    u8g2_DrawStr(&u8g2, 0,  40, line_tick);
+    u8g2_DrawStr(&u8g2, 0,  60, line_elapsed);
+    u8g2_DrawStr(&u8g2, 0,  80, line_batt);
+    u8g2_DrawStr(&u8g2, 0, 110, line_delay);
   } while (u8g2_NextPage(&u8g2));
 }
 
@@ -103,17 +115,22 @@ int main(void)
   NRF_LOG_INFO("startup: graphics initialized\n");
 
   // draw the boot info screen (u8g2 page loop, see below)
-  char sbuf[128];
+  char line_rfch[96];
+  char line_did[96];
   nrf_ic_info_get(&nrf_info);
+  sprintf(line_rfch, "RFCH:%02d, icrev: %d, flsz: %d, ramsz: %d",
+          get_channel(), nrf_info.ic_revision, nrf_info.flash_size, nrf_info.ram_size);
+  sprintf(line_did, "did1: 0x%lx, did0: 0x%lx, rb: %lu",
+          (unsigned long)NRF_FICR->DEVICEID[1],
+          (unsigned long)NRF_FICR->DEVICEID[0],
+          (unsigned long)NRF_FICR->NUMRAMBLOCK);
+
   u8g2_FirstPage(&u8g2);
   do {
     u8g2_SetFont(&u8g2, u8g2_font_6x10_tf);
     u8g2_SetFontMode(&u8g2, 0);   // solid glyphs (opaque background)
-    sprintf(sbuf, "RFCH:%02d, icrev: %d, flsz: %d, ramsz: %d", get_channel(), nrf_info.ic_revision, nrf_info.flash_size, nrf_info.ram_size);
-    u8g2_DrawStr(&u8g2, 0, 10, sbuf);
-
-    sprintf(sbuf, "did1: 0x%lx, did0: 0x%lx, rb: %lu", (unsigned long)NRF_FICR->DEVICEID[1], (unsigned long)NRF_FICR->DEVICEID[0], (unsigned long)NRF_FICR->NUMRAMBLOCK);
-    u8g2_DrawStr(&u8g2, 0, 30, sbuf);
+    u8g2_DrawStr(&u8g2, 0, 10, line_rfch);
+    u8g2_DrawStr(&u8g2, 0, 30, line_did);
 
     u8g2_SetFont(&u8g2, u8g2_font_10x20_tf);
     u8g2_DrawStr(&u8g2, 0, 60, "Hello lcd");
@@ -246,8 +263,11 @@ int main(void)
 
             elapsed = tick - elapsed;
 
+            /* show the duration of the previous redraw, not the absolute tick */
+            uint32_t last_draw_time = prev_draw_time;
+            int16_t vcc = get_vcc();
             prev_draw_time = tick;
-            render_status(c, elapsed, seconds, get_vcc(), prev_draw_time, contrast);
+            render_status(c, elapsed, seconds, vcc, last_draw_time, contrast);
             prev_draw_time = tick - prev_draw_time;
 
         } 
