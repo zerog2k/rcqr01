@@ -4,28 +4,27 @@
 // SDK 12.3.0 docs link: http://infocenter.nordicsemi.com/topic/com.nordic.infocenter.sdk5.v12.3.0/index.html
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <stdint.h>
-#include "SEGGER_RTT.h"
 
 #include "nrf.h"
 #include "nrf_delay.h"
 #include "nrf_gpio.h"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
-
+#include "SEGGER_RTT.h"
 
 #define LCD_BACKLIGHT 13
 
 // LCD Boost converter/regulator control pins
 #define MCP1256_PGOOD 14
 #define MCP1256_SLEEP 15
-#define MCP1256_ENABLE  27 // shutdown\
+#define MCP1256_ENABLE  27 // shutdown
 
 #include "radio.h"
 #include "apptimers.h"
 //#include "rtc.h"    // experimentation w/ rtc - using app_timers instead for now
-#include "gfx.h"
-#include "st7586.h"
+#include "display.h"
 #include "adc_hal.h"
 #include "keypad.h"
 #include "sleep.h"
@@ -43,17 +42,35 @@ uint8_t contrast = 255;
 
 sleep_mode_t sleep_mode = MODE_ACTIVE;
 
-systemticks_t gfxSystemTicks(void)
+/* full-screen status redraw, replacing the old set of gdispFillString calls */
+static void render_status(char key, uint32_t el,
+                          uint32_t secs, uint8_t batt,
+                          uint32_t draw_delay, uint8_t ctr)
 {
-	return tick;
-}
+  char sbuf[48];
 
-systemticks_t gfxMillisecondsToTicks(delaytime_t ms)
-{
-	return ms;
-}
+  u8g2_ClearBuffer(&u8g2);
+  u8g2_FirstPage(&u8g2);
+  do {
+    u8g2_SetFont(&u8g2, u8g2_font_10x20_tf);
+    u8g2_SetFontMode(&u8g2, 0);
 
-font_t font_small, font_med;
+    sprintf(sbuf, "char: %c", key);
+    u8g2_DrawStr(&u8g2, 0, 130, sbuf);
+
+    sprintf(sbuf, "hello lcd land, tick: %8lu", (unsigned long)tick);
+    u8g2_DrawStr(&u8g2, 0, 40, sbuf);
+
+    sprintf(sbuf, "elapsed: %8lu, secs: %4lu", (unsigned long)el, (unsigned long)secs);
+    u8g2_DrawStr(&u8g2, 0, 60, sbuf);
+
+    sprintf(sbuf, "batt: %3u", (unsigned)batt);
+    u8g2_DrawStr(&u8g2, 0, 80, sbuf);
+
+    sprintf(sbuf, "prev draw delay: %lu, contrast: %u", (unsigned long)draw_delay, (unsigned)ctr);
+    u8g2_DrawStr(&u8g2, 0, 110, sbuf);
+  } while (u8g2_NextPage(&u8g2));
+}
 
 
 int main(void)
@@ -81,32 +98,32 @@ int main(void)
   NRF_LOG_INFO("startup: timers initialized\n");
   //rtc_init();
 
-  gfxInit();
+  // Setup display
+  display_init();
   NRF_LOG_INFO("startup: graphics initialized\n");
-  font_small = gdispOpenFont("fixed_7x14");
-  font_med = gdispOpenFont("fixed_10x20");
 
-  //gdispControl(GDISP_CONTROL_ALL_PIXELS, 1);
-  //gdispSetPowerMode(powerOn);
-  
+  // draw the boot info screen (u8g2 page loop, see below)
   char sbuf[128];
-  nrf_ic_info_get(&nrf_info);  
-  sprintf(sbuf, "RFCH:%02d, icrev: %d, flsz: %d, ramsz: %d", get_channel(), nrf_info.ic_revision, nrf_info.flash_size, nrf_info.ram_size);
-  gdispDrawString(0,0, sbuf, font_small, White);
+  nrf_ic_info_get(&nrf_info);
+  u8g2_FirstPage(&u8g2);
+  do {
+    u8g2_SetFont(&u8g2, u8g2_font_6x10_tf);
+    u8g2_SetFontMode(&u8g2, 0);   // solid glyphs (opaque background)
+    sprintf(sbuf, "RFCH:%02d, icrev: %d, flsz: %d, ramsz: %d", get_channel(), nrf_info.ic_revision, nrf_info.flash_size, nrf_info.ram_size);
+    u8g2_DrawStr(&u8g2, 0, 10, sbuf);
 
-  sprintf(sbuf, "did1: 0x%x, did0: 0x%x, rb: %d", NRF_FICR->DEVICEID[1], NRF_FICR->DEVICEID[0],  NRF_FICR->NUMRAMBLOCK);
-  gdispDrawString(0,20, sbuf, font_small, White);   
-   
-   /*
-   // some test graphics...
-   gdispFillCircle(80, 80, 10, White);
-   gdispDrawBox(0, 00, 10, 10, White);
-   gdispDrawBox(330, 00, 10, 10, White);
-   gdispDrawBox(0, 140, 20, 20, White);
-  */      
+    sprintf(sbuf, "did1: 0x%lx, did0: 0x%lx, rb: %lu", (unsigned long)NRF_FICR->DEVICEID[1], (unsigned long)NRF_FICR->DEVICEID[0], (unsigned long)NRF_FICR->NUMRAMBLOCK);
+    u8g2_DrawStr(&u8g2, 0, 30, sbuf);
 
-  gdispDrawString(0,40, "Hello lcd", font_med, White);
-  gdispFlush();
+    u8g2_SetFont(&u8g2, u8g2_font_10x20_tf);
+    u8g2_DrawStr(&u8g2, 0, 60, "Hello lcd");
+
+    // some test graphics...
+    //u8g2_DrawDisc(&u8g2, 80, 80, 10, U8G2_DRAW_ALL);
+    //u8g2_DrawBox(&u8g2, 0, 0, 10, 10);
+    //u8g2_DrawBox(&u8g2, 330, 0, 10, 10);
+    //u8g2_DrawBox(&u8g2, 0, 140, 20, 20);
+  } while (u8g2_NextPage(&u8g2));
   NRF_LOG_INFO("startup: display drawn\n");
                                                                                                      
   radio_init();
@@ -149,7 +166,7 @@ int main(void)
   }
 
   NRF_LOG_INFO("startup: eeprom scan complete\n");
-  contrast = gdispGetContrast();
+  contrast = display_contrast_get();
   NRF_LOG_INFO("startup: entering main loop\n");
   /// LOOP
   while (true)
@@ -200,8 +217,6 @@ int main(void)
         {
             sleep_timer = seconds;    // reset sleep timer
             elapsed = tick;
-            sprintf(sbuf, "char: %c", c);
-            gdispFillString(0,130, sbuf, font_med, White, Black);
             // send char over radio
             send_char(c);
             // testing some power modes:
@@ -218,33 +233,21 @@ int main(void)
                 nrf_gpio_pin_toggle(MCP1256_ENABLE);
                 break;
                case 0xd1:
-                // left arrow, lower contrast                
-                gdispSetContrast(gdispGetContrast() - 2);
-                contrast = gdispGetContrast();
+                // left arrow, lower contrast
+                display_contrast_set(display_contrast_get() - 2);
+                contrast = display_contrast_get();
                 break;
                case 0xd2:
                 // right arrow, raise contrast
-                gdispSetContrast(gdispGetContrast() + 2);
-                contrast = gdispGetContrast();
+                display_contrast_set(display_contrast_get() + 2);
+                contrast = display_contrast_get();
                 break;
             }
-  
+
             elapsed = tick - elapsed;
 
-            sprintf(sbuf, "hello lcd land, tick: %8d", tick);
-            gdispFillString(0, 40, sbuf, font_med, White, Black);
-
-            sprintf(sbuf, "elapsed: %8d, secs: %4d", elapsed, seconds);
-            gdispFillString(0, 60, sbuf, font_med, White, Black);
-
-            sprintf(sbuf, "batt: %3d", get_vcc());
-            gdispFillString(0, 80, sbuf, font_med, White, Black);
-
-            sprintf(sbuf, "prev draw delay: %d, contrast: %d", prev_draw_time, contrast);
-            gdispFillString(0,110, sbuf, font_med, White, Black);
-
             prev_draw_time = tick;
-            gdispFlush();
+            render_status(c, elapsed, seconds, get_vcc(), prev_draw_time, contrast);
             prev_draw_time = tick - prev_draw_time;
 
         } 
