@@ -74,7 +74,8 @@ static void render_status(char key, uint32_t el,
           (unsigned long)draw_delay, (unsigned)contrast);
 
   u8g2_SetFont(&u8g2, u8g2_font_10x20_tf);
-  u8g2_SetFontMode(&u8g2, 0);
+  u8g2_SetFontMode(&u8g2, 1);  /* transparent: FirstPage() clears the page
+                                  buffer, opaque backgrounds are pure waste */
 
   u8g2_ClearBuffer(&u8g2);
   u8g2_FirstPage(&u8g2);
@@ -143,7 +144,7 @@ int main(void)
   u8g2_FirstPage(&u8g2);
   do {
     u8g2_SetFont(&u8g2, u8g2_font_7x13_tf);
-    u8g2_SetFontMode(&u8g2, 0);   // solid glyphs (opaque background)
+    u8g2_SetFontMode(&u8g2, 1);   // transparent glyphs (buffer cleared per page)
     u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X, 10, line_rfch);
     u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X, 30, line_did);
 
