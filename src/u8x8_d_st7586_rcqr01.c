@@ -22,6 +22,16 @@
 /* number of visible triple-columns: 320 / 3 */
 #define ST7586_RCQR01_DISPLAY_COLS         120
 
+/* staging buffer for one page of expanded ST7586 data:
+   the u8g2 page buffer delivers 8 rows x 45 bytes, which expand to
+   8 rows x 120 triple-columns = 960 controller bytes; sent in chunks of
+   at most 255 bytes because u8x8_cad_SendData() and
+   nrf_drv_spi_transfer() both take a uint8_t count */
+#define ST7586_RCQR01_PAGE_OUT_MAX  (ST7586_RCQR01_DISPLAY_COLS * 8)
+#define ST7586_RCQR01_SEND_CHUNK    255
+
+static uint8_t page_out[ST7586_RCQR01_PAGE_OUT_MAX];
+
 static const uint8_t u8x8_d_st7586_rcqr01_sleep_on[] = {
   U8X8_START_TRANSFER(),              /* enable chip */
   U8X8_C(0x010),                      /* display off / power save */
@@ -127,11 +137,11 @@ static const u8x8_display_info_t u8x8_st7586_rcqr01_display_info = {
 
 uint8_t u8x8_d_st7586_rcqr01(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
-  uint16_t c;
+  uint16_t c, out_len, off;
   uint8_t *ptr;
   uint32_t input;
-  uint8_t i, byte;
-  uint8_t output[8];
+  uint8_t i, byte, n;
+  uint8_t *out;
 
   switch (msg) {
     case U8X8_MSG_DISPLAY_DRAW_TILE:
@@ -159,7 +169,9 @@ uint8_t u8x8_d_st7586_rcqr01(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *a
     ptr = ((u8x8_tile_t *)arg_ptr)->tile_ptr;
 
     /* expand u8g2's horizontal-LSb bytes into 2-bit-per-pixel ST7586 data:
-       every 3 input bytes (24 pixels) become 8 output bytes */
+       every 3 input bytes (24 pixels) become 8 output bytes, staged into
+       page_out so the whole row can be sent in few large transfers */
+    out = page_out;
     while (c > 0)
     {
       input = (((uint32_t)ptr[0] << 16) | ((uint32_t)ptr[1] << 8) | (uint32_t)ptr[2]);
@@ -172,12 +184,22 @@ uint8_t u8x8_d_st7586_rcqr01(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *a
           byte |= 0x18;             /* set pixel 2 */
         if (input & 0x200000)       /* if bit 21 */
           byte |= 0x03;             /* set pixel 3 */
-        output[i] = byte;
+        *out++ = byte;
         input <<= 3;
       }
-      u8x8_cad_SendData(u8x8, 8, output);
       ptr += 3;
       c -= 3;
+    }
+    out_len = (uint16_t)(out - page_out);
+
+    /* send the expanded row as big chunks; u8x8_cad_011's SEND_DATA
+       forwards the full count in one byte-callback call, and the SPI
+       transfer length is uint8_t so chunks must stay <= 255 bytes */
+    for (off = 0; off < out_len; off += ST7586_RCQR01_SEND_CHUNK)
+    {
+      n = (out_len - off > ST7586_RCQR01_SEND_CHUNK)
+            ? ST7586_RCQR01_SEND_CHUNK : (uint8_t)(out_len - off);
+      u8x8_cad_SendData(u8x8, n, page_out + off);
     }
     u8x8_cad_EndTransfer(u8x8);
     break;
