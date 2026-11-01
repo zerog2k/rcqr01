@@ -1,7 +1,7 @@
 
 // display/sleep mode stuff
-#define SLEEP_BACKLIGHT_DELAY    6
-#define SLEEP_DISPLAY_DELAY      12
+#define SLEEP_BACKLIGHT_DELAY    8
+#define SLEEP_DISPLAY_DELAY      14
 
 uint32_t sleep_timer = 0;
 

@@ -102,8 +102,8 @@ static void render_display_alignment_test(void)
 
 int main(void)
  {
-  //SEGGER_RTT_Init();
-  //SEGGER_RTT_WriteString(0, "entered main\n");
+  SEGGER_RTT_Init();
+  SEGGER_RTT_WriteString(0, "entered main\n");
   nrf_delay_ms(10);
 
   // initially tristate all col/row pins

@@ -8,3 +8,4 @@ disassembly
 .piolibdeps/
 .venv/
 .vscode/
+__pycache__
