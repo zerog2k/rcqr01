@@ -1,0 +1,12 @@
+# Store and check out all text files with LF line endings.
+* text=auto eol=lf
+
+# Binary assets: never convert these.
+*.jpg binary
+*.png binary
+*.pdf binary
+*.hex binary
+*.bin binary
+*.elf binary
+*.o binary
+*.a binary
