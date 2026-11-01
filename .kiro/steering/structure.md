@@ -11,7 +11,7 @@ rcqr01/
 │   ├── adc_hal.h           # ADC / battery voltage reading
 │   ├── display.c/.h        # u8g2 display initialization and contrast control
 │   ├── u8g2_nrf51.c/.h     # nRF51 SPI and GPIO callbacks for u8g2
-│   ├── u8x8_d_st7586_rcqr01.c/.h # Custom 360x160 ST7586 driver
+│   ├── u8x8_d_st7586_rcqr01.c/.h # Custom 340x160 ST7586 driver
 │   ├── board_ST7586.h      # Board-level pin/config for ST7586 LCD driver
 │   ├── sdk_includes.c      # Selected external nRF5 SDK source compilation unit
 │   └── sdk_config.h        # Nordic SDK peripheral/module enable flags

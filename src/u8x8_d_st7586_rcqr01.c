@@ -2,16 +2,16 @@
  * u8x8_d_st7586_rcqr01.c
  *
  * Custom u8x8 display driver for the RCQR-01 (Turning Technologies QT clicker)
- * ST7586 panel: 360x160 pixels, 2-bit grayscale packing (3 pixels per byte).
+ * ST7586 panel: 340x160 pixels, 2-bit grayscale packing (3 pixels per byte).
  *
  * Adapted from:
  *   - the original working uGFX ST7586 driver (drivers/gdisp/ST7586), and
  *   - u8g2's u8x8_d_st7586s_jlx320160.c (same pixel packing, m_42_20 memory).
  *
  * Geometry (from the original uGFX driver):
- *   - visible area: 360 x 160; the leftmost 21 controller columns (63 px)
+ *   - visible area: 340 x 160; the leftmost 21 controller columns (63 px)
  *     are hidden, data starts at controller column 21/3 = 7
- *   - column window: 7..126 (120 triple-columns = 360 pixels)
+ *   - column window: 7..126 (120 triple-columns = 340 pixels)
  *   - row window: 0..159
  */
 
@@ -19,7 +19,7 @@
 
 /* controller column (triple-pixel-unit) where the visible area starts */
 #define ST7586_RCQR01_DISPLAY_COL_OFFSET   7
-/* number of visible triple-columns: 360 / 3 */
+/* number of visible triple-columns: 320 / 3 */
 #define ST7586_RCQR01_DISPLAY_COLS         120
 
 static const uint8_t u8x8_d_st7586_rcqr01_sleep_on[] = {

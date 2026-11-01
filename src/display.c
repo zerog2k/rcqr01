@@ -13,7 +13,7 @@ void display_init(void) {
     // configure pins/reset and the HW SPI instance
     st7586_board_init();
 
-    // custom ST7586 (RCQR-01) display driver, 360x160, packed 2-bit pixels
+    // custom ST7586 (RCQR-01) display driver, 340x160, packed 2-bit pixels
     u8g2_SetupDisplay(
         &u8g2,
         u8x8_d_st7586_rcqr01,

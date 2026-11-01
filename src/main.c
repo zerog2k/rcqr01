@@ -33,6 +33,9 @@
 #include "nrf_ic_info.h"
 nrf_ic_info_t nrf_info;
 
+#define DISPLAY_ALIGNMENT_TEST 0
+#define DISPLAY_TEXT_X 1 // horizontal offset.
+
 uint32_t elapsed, prev_draw_time = 0;
 
 uint8_t i, c, prev_keyscan, last_press_seconds = 0;
@@ -63,11 +66,11 @@ static void render_status(char key, uint32_t el,
    */
   sprintf(line_char,    "char: %c", key);
   sprintf(line_tick,    "hello lcd land, tick: %8lu", (unsigned long)tick);
-  sprintf(line_elapsed, "elapsed: %8lu, secs: %4lu",
+  sprintf(line_elapsed, "elapsed: %4lu, secs: %5lu",
           (unsigned long)el, (unsigned long)secs);
   sprintf(line_batt,    "batt: %3u", (unsigned)batt);
-  /* keep this line within the 360 px display width */
-  sprintf(line_delay,   "delay: %lu, contrast: %u",
+  /* Keep this line within the measured visible display width. */
+  sprintf(line_delay,   "delay: %3lu, contrast: %2u",
           (unsigned long)draw_delay, (unsigned)contrast);
 
   u8g2_SetFont(&u8g2, u8g2_font_10x20_tf);
@@ -76,21 +79,30 @@ static void render_status(char key, uint32_t el,
   u8g2_ClearBuffer(&u8g2);
   u8g2_FirstPage(&u8g2);
   do {
-    u8g2_DrawStr(&u8g2, 0, 130, line_char);
-    u8g2_DrawStr(&u8g2, 0,  40, line_tick);
-    u8g2_DrawStr(&u8g2, 0,  60, line_elapsed);
-    u8g2_DrawStr(&u8g2, 0,  80, line_batt);
-    u8g2_DrawStr(&u8g2, 0, 110, line_delay);
+    u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X, 130, line_char);
+    u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X,  40, line_tick);
+    u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X,  60, line_elapsed);
+    u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X,  80, line_batt);
+    u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X, 110, line_delay);
   } while (u8g2_NextPage(&u8g2));
 }
 
+#if DISPLAY_ALIGNMENT_TEST
+static void render_display_alignment_test(void)
+{
+  u8g2_ClearBuffer(&u8g2);
+  u8g2_FirstPage(&u8g2);
+  do {
+    /* Outer logical bounds and adjacent edge markers. */
+    u8g2_DrawFrame(&u8g2, 1, 0, 340, 160);
+  } while (u8g2_NextPage(&u8g2));
+}
+#endif
 
 int main(void)
  {
-  nrf_delay_ms(500);
-  SEGGER_RTT_Init();
-  nrf_delay_ms(500);
-  SEGGER_RTT_WriteString(0, "entered main\n");
+  //SEGGER_RTT_Init();
+  //SEGGER_RTT_WriteString(0, "entered main\n");
   nrf_delay_ms(10);
 
   // initially tristate all col/row pins
@@ -114,7 +126,10 @@ int main(void)
   display_init();
   NRF_LOG_INFO("startup: graphics initialized\n");
 
-  // draw the boot info screen (u8g2 page loop, see below)
+  // Draw the boot info screen (u8g2 page loop, see below).
+#if DISPLAY_ALIGNMENT_TEST
+  render_display_alignment_test();
+#else
   char line_rfch[96];
   char line_did[96];
   nrf_ic_info_get(&nrf_info);
@@ -127,13 +142,13 @@ int main(void)
 
   u8g2_FirstPage(&u8g2);
   do {
-    u8g2_SetFont(&u8g2, u8g2_font_6x10_tf);
+    u8g2_SetFont(&u8g2, u8g2_font_7x13_tf);
     u8g2_SetFontMode(&u8g2, 0);   // solid glyphs (opaque background)
-    u8g2_DrawStr(&u8g2, 0, 10, line_rfch);
-    u8g2_DrawStr(&u8g2, 0, 30, line_did);
+    u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X, 10, line_rfch);
+    u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X, 30, line_did);
 
     u8g2_SetFont(&u8g2, u8g2_font_10x20_tf);
-    u8g2_DrawStr(&u8g2, 0, 60, "Hello lcd");
+    u8g2_DrawStr(&u8g2, DISPLAY_TEXT_X, 60, "Hello lcd");
 
     // some test graphics...
     //u8g2_DrawDisc(&u8g2, 80, 80, 10, U8G2_DRAW_ALL);
@@ -141,6 +156,7 @@ int main(void)
     //u8g2_DrawBox(&u8g2, 330, 0, 10, 10);
     //u8g2_DrawBox(&u8g2, 0, 140, 20, 20);
   } while (u8g2_NextPage(&u8g2));
+#endif
   NRF_LOG_INFO("startup: display drawn\n");
                                                                                                      
   radio_init();

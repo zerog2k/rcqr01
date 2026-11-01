@@ -9,11 +9,11 @@ My adventures in reverse engineering an interesting platform.
 * low ram (non 32k model) makes it very tricky to run any BLE softdevice.
 
 ### Display
- * lcd 360x160 ?, 2-bit grayscale ?
+ * lcd 340x160 ?, 2-bit grayscale ?
  * maybe ST7586 chipset? connected to serial bus. Use SPI to transfer data to chip.
  * custom u8g2/u8x8 driver for the ST7586
  * unusual pixel column format (packed 3 pixels per byte)
- * one-page 1bpp buffer, 360 bytes, to keep RAM usage low
+ * one-page 1bpp buffer, 340 bytes, to keep RAM usage low
  * Microchip MCP1256 3.3v boost converter/regulator powers lcd stuff
  
 ### eeprom
@@ -87,7 +87,7 @@ see picture below
 ### Graphics
 
 The display is initialized by `display_init()` in `src/display.c`. The custom
-`src/u8x8_d_st7586_rcqr01.c` driver handles the 360x160 panel geometry, the
+`src/u8x8_d_st7586_rcqr01.c` driver handles the 340x160 panel geometry, the
 hidden controller columns, and the panel's three-pixels-per-byte format.
 Rendering uses u8g2 page mode with a 360-byte buffer. The application uses
 `u8g2_font_6x10_tf` for small text and `u8g2_font_10x20_tf` for larger text.

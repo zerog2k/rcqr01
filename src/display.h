@@ -6,8 +6,8 @@
 /* shared u8g2 instance for all drawing code */
 extern u8g2_t u8g2;
 
-/* 360x160 display geometry */
-#define DISPLAY_WIDTH   360
+/* 340x160 display geometry */
+#define DISPLAY_WIDTH   340
 #define DISPLAY_HEIGHT  160
 
 void display_init(void);

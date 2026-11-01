@@ -2,7 +2,7 @@
 
 **Target hardware** – Nordic nRF51822 (16 KB RAM, 256 KB Flash)
 
-**Display** – ST7586 (360 × 160 monochrome, 1‑bpp)
+**Display** – ST7586 (340 × 160 monochrome, 1‑bpp)
 
 **Build system** – VS Code + PlatformIO (`platform = nordicnrf51`)
 
@@ -14,12 +14,12 @@
 
 | Item | Size |
 |------|------|
-| Display pixels | 360 × 160 = 57 600 px |
-| Full 1‑bpp framebuffer | 57 600 / 8 = 7 200 B (≈ 44 % of RAM) – **unacceptable** |
-| u8g2 page buffer (16‑line) | (360 × 16) / 8 = 720 B – saves ~6 KB RAM |
+| Display pixels | 340 × 160 = 54 400 px |
+| Full 1‑bpp framebuffer | 54 400 / 8 = 7 200 B (≈ 44 % of RAM) – **unacceptable** |
+| u8g2 page buffer (16‑line) | (340 × 16) / 8 = 720 B – saves ~6 KB RAM |
 
 The ST7586 uses an unusual three-pixels-per-byte format. The stock u8g2
-constructors do not match this 360x160 panel, so the project uses a custom
+constructors do not match this 340x160 panel, so the project uses a custom
 u8x8 driver.
 
 ---

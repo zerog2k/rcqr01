@@ -16,7 +16,7 @@
   - `src/sdk_includes.c` compiles the selected SDK sources directly from this checkout
   - `scripts/setup_sdk.py` applies and verifies the ESB getter and app-timer SWI3 compatibility fixes
 - **u8g2** — display rendering library from PlatformIO
-- **Custom u8x8 ST7586 driver** — project-specific 360x160 LCD transport and packing
+- **Custom u8x8 ST7586 driver** — project-specific 340x160 LCD transport and packing
 - **SEGGER RTT** — used for debug logging (via `NRF_LOG` macros backed by RTT in debug builds)
 
 ## Key Libraries Used (from SDK)
