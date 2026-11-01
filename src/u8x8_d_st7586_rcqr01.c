@@ -8,18 +8,22 @@
  *   - the original working uGFX ST7586 driver (drivers/gdisp/ST7586), and
  *   - u8g2's u8x8_d_st7586s_jlx320160.c (same pixel packing, m_42_20 memory).
  *
- * Geometry (from the original uGFX driver):
- *   - visible area: 340 x 160; the leftmost 21 controller columns (63 px)
- *     are hidden, data starts at controller column 21/3 = 7
- *   - column window: 7..126 (120 triple-columns = 340 pixels)
+ * Geometry:
+ *   - viewable (glass) area: 340 x 160
+ *   - the data window starts at controller triple-column 7 (21/3), i.e. the
+ *     leftmost 21 px sit behind the bezel
+ *   - column window: 7..126 = 120 triple-columns = 360 px, a superset of the
+ *     340 viewable px (matches the 360-px u8x8 width, see display_info)
  *   - row window: 0..159
  */
 
 #include "u8x8_d_st7586_rcqr01.h"
 
-/* controller column (triple-pixel-unit) where the visible area starts */
+/* controller triple-column where the driver's data window starts; each
+   triple-column is 3 px, so 7 columns = 21 px hidden behind the bezel */
 #define ST7586_RCQR01_DISPLAY_COL_OFFSET   7
-/* number of visible triple-columns: 320 / 3 */
+/* number of triple-columns written per row: 360 px / 3 = 120 (a superset of
+   the 340 px viewable width) */
 #define ST7586_RCQR01_DISPLAY_COLS         120
 
 /* staging buffer for one page of expanded ST7586 data:
@@ -214,7 +218,7 @@ uint8_t u8x8_d_st7586_rcqr01(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *a
     u8x8_cad_SendArg(u8x8, 0x000);
     u8x8_cad_SendArg(u8x8, u8x8->display_info->pixel_height - 1);
 
-    /* column address window: the 120 visible triple-columns */
+    /* column address window: the 120 triple-columns written (360 px) */
     u8x8_cad_SendCmd(u8x8, 0x02a);  /* column address setting */
     u8x8_cad_SendArg(u8x8, 0x000);
     u8x8_cad_SendArg(u8x8, ST7586_RCQR01_DISPLAY_COL_OFFSET);

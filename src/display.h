@@ -6,10 +6,6 @@
 /* shared u8g2 instance for all drawing code */
 extern u8g2_t u8g2;
 
-/* 340x160 display geometry */
-#define DISPLAY_WIDTH   340
-#define DISPLAY_HEIGHT  160
-
 void display_init(void);
 
 /* forget what the ST7586 panel RAM currently holds (blank-page skip map,
