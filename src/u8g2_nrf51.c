@@ -8,14 +8,6 @@
 /* The single HW SPI instance used by the LCD (and EEPROM, see eeprom.h). */
 const nrf_drv_spi_t spi = NRF_DRV_SPI_INSTANCE(SPI_INSTANCE);
 
-static volatile bool spi_xfer_done;
-
-static void spi_event_handler(nrf_drv_spi_evt_t const * p_event)
-{
-    spi_xfer_done = true;
-    //NRF_LOG_DEBUG("spi transfer completed.\n");
-}
-
 void st7586_board_init(void)
 {
     // setup pins
@@ -39,7 +31,10 @@ void st7586_board_init(void)
     spi_config.mosi_pin = LCD_MOSI;
     spi_config.sck_pin  = LCD_SCK;
     spi_config.frequency = NRF_DRV_SPI_FREQ_8M;
-    APP_ERROR_CHECK(nrf_drv_spi_init(&spi, &spi_config, spi_event_handler));
+    /* No event handler: the SDK driver then runs nrf_drv_spi_transfer() in
+       blocking (polling) mode, keeping interrupts to the SPI instance off
+       while the transfer still blocks until every byte is clocked out. */
+    APP_ERROR_CHECK(nrf_drv_spi_init(&spi, &spi_config, NULL));
 }
 
 uint8_t u8x8_gpio_and_delay_nrf51(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr) {
@@ -73,9 +68,12 @@ uint8_t u8x8_gpio_and_delay_nrf51(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, vo
 uint8_t u8x8_byte_nrf51_hw_spi(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr) {
     switch (msg) {
         case U8X8_MSG_BYTE_SEND:
-            spi_xfer_done = false;
-            nrf_drv_spi_transfer(&spi, (uint8_t *)arg_ptr, arg_int, NULL, 0);
-            while (!spi_xfer_done);
+            /* NULL handler -> the SDK polls EVENTS_READY internally and only
+               returns once the whole transfer is complete; errors other than
+               success (e.g. NRF_ERROR_BUSY, impossible in this
+               single-threaded path) reset via the app error handler. */
+            APP_ERROR_CHECK(nrf_drv_spi_transfer(&spi, (uint8_t *)arg_ptr,
+                                                 arg_int, NULL, 0));
             break;
         case U8X8_MSG_BYTE_SET_DC:
             nrf_gpio_pin_write(u8x8->pins[U8X8_PIN_DC], arg_int);
