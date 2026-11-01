@@ -36,6 +36,16 @@ void display_init(void) {
 
     u8g2_InitDisplay(&u8g2);
     u8g2_SetPowerSave(&u8g2, 0);
+
+    // nothing known blank on panel RAM after reset/init: first frame
+    // must write every page
+    display_invalidate_panel_state();
+}
+
+/* thin wrapper around the driver-level blank-page map reset (phase C1) */
+void display_invalidate_panel_state(void)
+{
+    u8x8_d_st7586_rcqr01_invalidate_blank_map();
 }
 
 /* ST7586 contrast is stepped via VOP joystick commands, as in the

@@ -217,6 +217,8 @@ int main(void)
       {
         sleep_timer = seconds;    // reset sleep timer
         nrf_gpio_pin_write(MCP1256_ENABLE, 1);  // turn on lcd/led regulator
+        // panel power was cut: controller RAM undefined, force full repaints
+        display_invalidate_panel_state();
         //nrf_gpio_pin_write(LCD_BACKLIGHT, 1);
         low_power_pwm_duty_set(&display_pwm, DISPLAY_MEDIUM);
         sleep_mode = MODE_ACTIVE;
@@ -237,6 +239,8 @@ int main(void)
       {
         // transition from backlight to display off & sleep
         nrf_gpio_pin_write(MCP1256_ENABLE, 0);  // turn off lcd/led regulator
+        // conservative: panel loses power, nothing known blank anymore
+        display_invalidate_panel_state();
         sleep_mode = MODE_SLEEP_DISPLAY;
         __WFE();
         __SEV();
@@ -264,6 +268,8 @@ int main(void)
                case 's':
                 // shutdown regulator to turn off lcd & led
                 nrf_gpio_pin_toggle(MCP1256_ENABLE);
+                // either direction: panel power is lost/gained, invalidate
+                display_invalidate_panel_state();
                 break;
                case 0xd1:
                 // left arrow, lower contrast

@@ -32,6 +32,15 @@
 
 static uint8_t page_out[ST7586_RCQR01_PAGE_OUT_MAX];
 
+/* number of 8-row pages (tile rows): 160 / 8 */
+#define ST7586_RCQR01_DISPLAY_PAGES  20
+
+/* blank-page skip map (phase C1): one bit per page; a set bit means the page
+   was blank in the last frame actually sent, so the panel keeps its RAM and
+   the page can be skipped entirely. All bits start 0 = "not known blank",
+   so the first frame after power-up/init writes every page: 20 pages -> 3 B */
+static uint8_t blank_pages[(ST7586_RCQR01_DISPLAY_PAGES + 7) / 8];
+
 static const uint8_t u8x8_d_st7586_rcqr01_sleep_on[] = {
   U8X8_START_TRANSFER(),              /* enable chip */
   U8X8_C(0x010),                      /* display off / power save */
@@ -135,16 +144,67 @@ static const u8x8_display_info_t u8x8_st7586_rcqr01_display_info = {
   /* pixel_height = */ 160
 };
 
+static uint8_t _blank_page_get(uint8_t idx)
+{
+  return (blank_pages[idx >> 3] >> (idx & 7)) & 1;
+}
+
+static void _blank_page_set(uint8_t idx, uint8_t val)
+{
+  if (val)
+    blank_pages[idx >> 3] |= 1u << (idx & 7);
+  else
+    blank_pages[idx >> 3] &= (uint8_t)~(1u << (idx & 7));
+}
+
+/* phase C1 invalidation: forget what the panel RAM currently looks like,
+   so the next frame writes every page. Call after panel power loss
+   (sleep/wake, 's' toggle, power-save, init/reset). */
+void u8x8_d_st7586_rcqr01_invalidate_blank_map(void)
+{
+  uint8_t i;
+  for (i = 0; i < sizeof(blank_pages); i++)
+    blank_pages[i] = 0;
+}
+
 uint8_t u8x8_d_st7586_rcqr01(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *arg_ptr)
 {
-  uint16_t c, out_len, off;
+  uint16_t c, out_len, off, tile_cnt;
   uint8_t *ptr;
   uint32_t input;
   uint8_t i, byte, n;
   uint8_t *out;
+  uint8_t *tile_ptr, tile_blank, page;
 
   switch (msg) {
     case U8X8_MSG_DISPLAY_DRAW_TILE:
+
+    /* phase C1: an all-zero tile row contains no pixels. The panel retains
+       its RAM, so if this page was also blank in the last frame actually
+       sent, skip it completely (no CS, no commands, no data). A newly blank
+       page is still sent once to clear the old content, then its map bit
+       is set. The map must always reflect the last frame actually sent. */
+    tile_cnt = ((u8x8_tile_t *)arg_ptr)->cnt;
+    tile_cnt *= 8;                       /* normally 45 * 8 = 360 bytes */
+    tile_ptr = ((u8x8_tile_t *)arg_ptr)->tile_ptr;
+    tile_blank = 1;
+    while (tile_cnt > 0)
+    {
+      if (*tile_ptr++ != 0)
+      {
+        tile_blank = 0;
+        break;
+      }
+      tile_cnt--;
+    }
+    page = ((u8x8_tile_t *)arg_ptr)->y_pos;
+    if (page < ST7586_RCQR01_DISPLAY_PAGES)
+    {
+      if (tile_blank && _blank_page_get(page))
+        return 1;                        /* already blank on the panel */
+      _blank_page_set(page, tile_blank);
+    }
+
     u8x8_cad_StartTransfer(u8x8);
 
     /* row address window: page start row .. last row */
@@ -227,6 +287,9 @@ uint8_t u8x8_d_st7586_rcqr01(u8x8_t *u8x8, uint8_t msg, uint8_t arg_int, void *a
       break;
 
     case U8X8_MSG_DISPLAY_SET_POWER_SAVE:
+      /* conservative: a power-save cycle or panel power-down leaves the
+         controller RAM contents outside the driver's knowledge */
+      u8x8_d_st7586_rcqr01_invalidate_blank_map();
       if (arg_int == 0)
         u8x8_cad_SendSequence(u8x8, u8x8_d_st7586_rcqr01_sleep_off);
       else
