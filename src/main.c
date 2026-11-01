@@ -33,7 +33,6 @@
 #include "nrf_ic_info.h"
 nrf_ic_info_t nrf_info;
 
-#define DISPLAY_ALIGNMENT_TEST 0
 #define DISPLAY_TEXT_X 1 // horizontal offset.
 
 uint32_t elapsed, prev_draw_time = 0;
@@ -88,18 +87,6 @@ static void render_status(char key, uint32_t el,
   } while (u8g2_NextPage(&u8g2));
 }
 
-#if DISPLAY_ALIGNMENT_TEST
-static void render_display_alignment_test(void)
-{
-  u8g2_ClearBuffer(&u8g2);
-  u8g2_FirstPage(&u8g2);
-  do {
-    /* Outer logical bounds and adjacent edge markers. */
-    u8g2_DrawFrame(&u8g2, 1, 0, 340, 160);
-  } while (u8g2_NextPage(&u8g2));
-}
-#endif
-
 int main(void)
  {
   SEGGER_RTT_Init();
@@ -128,9 +115,6 @@ int main(void)
   NRF_LOG_INFO("startup: graphics initialized\n");
 
   // Draw the boot info screen (u8g2 page loop, see below).
-#if DISPLAY_ALIGNMENT_TEST
-  render_display_alignment_test();
-#else
   char line_rfch[96];
   char line_did[96];
   nrf_ic_info_get(&nrf_info);
@@ -157,7 +141,6 @@ int main(void)
     //u8g2_DrawBox(&u8g2, 330, 0, 10, 10);
     //u8g2_DrawBox(&u8g2, 0, 140, 20, 20);
   } while (u8g2_NextPage(&u8g2));
-#endif
   NRF_LOG_INFO("startup: display drawn\n");
                                                                                                      
   radio_init();
