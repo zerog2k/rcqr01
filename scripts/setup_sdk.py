@@ -60,6 +60,19 @@ def main():
         "app timer handler",
         args.check,
     )
+    if apply_replacement(
+        sdk_path / "components/proprietary_rf/esb/nrf_esb.c",
+        "    uint32_t inp = (*(uint32_t*)p_inp);",
+        "    /* m_esb_addr has byte alignment, so this load may be unaligned;\n"
+        "       Cortex-M0 faults on unaligned word accesses. Read bytewise. */\n"
+        "    uint32_t inp = ((uint32_t)p_inp[0])       |\n"
+        "                   ((uint32_t)p_inp[1] << 8)  |\n"
+        "                   ((uint32_t)p_inp[2] << 16) |\n"
+        "                   ((uint32_t)p_inp[3] << 24);",
+        "ESB unaligned address load",
+        args.check,
+    ):
+        changed.append("ESB unaligned address load")
 
     if changed:
         print(f"Patched SDK at {sdk_path}: {', '.join(changed)}")

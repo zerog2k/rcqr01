@@ -100,10 +100,13 @@ include and linker paths from the same root.
 ## SDK patches
 
 The project uses nRF5 SDK 12.3.0. `scripts/setup_sdk.py` applies and verifies
-the two compatibility fixes needed by this project:
+the three compatibility fixes needed by this project:
 
 1. Fix the ESB channel getter name in `components/proprietary_rf/esb/nrf_esb.h`
 2. Use `SWI3` for the app timer handler in `components/libraries/timer/app_timer.c`
+3. Read the ESB address bytes bytewise in `components/proprietary_rf/esb/nrf_esb.c`.
+   `m_esb_addr` has byte alignment, so the SDK's 32-bit load can become an
+   unaligned access; the Cortex-M0 then hard-faults during `radio_init()`.
 
 The SDK root defaults to:
 
@@ -125,7 +128,7 @@ edits idempotently.
  * [nrf51822 product specification datasheet](http://infocenter.nordicsemi.com/pdf/nRF51822_PS_v3.1.pdf)
  * [nrf51 reference manual](http://infocenter.nordicsemi.com/pdf/nRF51_RM_v3.0.pdf)
  * [nordic nrf51 sdk 12.3.0](http://infocenter.nordicsemi.com/topic/com.nordic.infocenter.sdk5.v12.3.0/index.html)
-   * this repo includes patch files under `patches/` for the two known SDK fixes used by the project
+   * this repo includes patch files under `patches/` for the known SDK fixes used by the project
  * [CAT25512 datasheet](http://www.onsemi.com/pub/Collateral/CAT25512-D.PDF)
  * [ST7586 datasheet](https://www.buydisplay.com/download/ic/ST7586.pdf)
  * [MCP1256 datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/21989a.pdf)

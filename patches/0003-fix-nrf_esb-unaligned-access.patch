@@ -1,0 +1,15 @@
+diff --git a/components/proprietary_rf/esb/nrf_esb.c b/components/proprietary_rf/esb/nrf_esb.c
+index 0000000..0000000 100644
+--- a/components/proprietary_rf/esb/nrf_esb.c
++++ b/components/proprietary_rf/esb/nrf_esb.c
+@@
+ // Function to do bytewise bit-swap on an unsigned 32-bit value
+ static uint32_t bytewise_bit_swap(uint8_t const * p_inp)
+ {
+-    uint32_t inp = (*(uint32_t*)p_inp);
++    /* m_esb_addr has byte alignment, so this load may be unaligned;
++       Cortex-M0 faults on unaligned word accesses. Read bytewise. */
++    uint32_t inp = ((uint32_t)p_inp[0])       |
++                   ((uint32_t)p_inp[1] << 8)  |
++                   ((uint32_t)p_inp[2] << 16) |
++                   ((uint32_t)p_inp[3] << 24);
